@@ -5,24 +5,21 @@ import warnings
 
 class hrf:
     """
-    Class to compute Huang-Rhys factors and spectral density from phonon
-    frequencies, eigenmodes, and either forces or displacements. All inputs,
-    except atomic mass, should be in the SI units.
+    Compute Huang-Rhys factors and spectral density from phonon
+    frequencies, eigenmodes, and either forces or displacements.
+    All inputs, except atomic masses, should be in SI units.
+
+    Parameters
+    ----------
+    freqs : ndarray of shape (3N,)
+        Phonon frequencies in rad/s.
+    modes : ndarray of shape (3N, N, 3)
+        Phonon eigenmodes.
+    atomic_symbols : list of str
+        Atomic chemical symbols.
     """
 
     def __init__(self, freqs, modes, atomic_symbols):
-        """
-        Initialize the HRF object.
-
-        Parameters
-        ----------
-        freqs : ndarray of shape (3N,)
-            Phonon frequencies (in rad/s).
-        modes : ndarray of shape (3N, N, 3)
-            Phonon eigenmodes.
-        atomic_symbols : list of str
-            List of atomic chemical symbols.
-        """
 
         self.freqs = freqs
         self.modes = modes
@@ -40,13 +37,17 @@ class hrf:
 
     def set_masses(self, mass_list=None):
         """
-        Set atomic masses in kg for all atoms in the system.
+        Set atomic masses in kilograms for all atoms in the system.
 
         Parameters
         ----------
         mass_list : dict, optional
             Dictionary mapping element symbols to atomic masses in unified atomic
             mass units (u). If not provided, IUPAC-recommended values are used.
+
+        Notes
+        -----
+        The converted atomic masses are stored in ``self.masses`` in kilograms.
         """
 
         default_mass_list = mass_list = {
@@ -84,15 +85,27 @@ class hrf:
 
 
     def compute_hrf_forces(self, forces):
-        """
-        Compute Huang-Rhys factors using forces.\n
-        :math:`S_k = \\frac{\omega_k \Delta Q_k^2}{2\hbar}`\n
-        :math:`\Delta Q_k = \\frac{1}{\omega_k^2} \sum_{\\alpha=1}^N \sum_{i=x,y,z} \\frac{F_{\\alpha i}}{\sqrt{M_{\\alpha}}} e_{k, \\alpha i}`
-        
+        r"""
+        Compute Huang-Rhys factors using atomic forces.
+
+        .. math::
+
+            S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}
+
+        where
+
+        .. math::
+
+            \Delta Q_k = \frac{1}{\omega_k^2} \sum_{\alpha=1}^N \sum_{i=x,y,z} \frac{F_{\alpha i}}{\sqrt{M_\alpha}} e_{k, \alpha i}
+
         Parameters
         ----------
         forces : ndarray of shape (N, 3)
-            Force vector on each atom in (J / meter).
+            Forces on atoms in J/m (SI units).
+
+        Notes
+        -----
+        The computed Huang-Rhys factors are stored in ``self.hrf``.
         """
 
         mass_forces = forces * np.power(self.masses, -0.5)[:, None]
@@ -107,19 +120,32 @@ class hrf:
 
 
     def compute_hrf_dis(self, gs_coord, es_coord, cell_parameters):
-        """
-        Compute Huang-Rhys factors using atomic displacement.\n
-        :math:`S_k = \\frac{\omega_k \Delta Q_k^2}{2\hbar}`\n
-        :math:`\Delta Q_k = \sum_{\\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_{\\alpha}} \Delta R_{\\alpha i} e_{k, \\alpha i}`
-        
+        r"""
+        Compute Huang-Rhys factors using atomic displacements.
+
+        .. math::
+
+            S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}
+
+        with
+
+        .. math::
+
+            \Delta Q_k = \sum_{\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_\alpha} \Delta R_{\alpha i} e_{k, \alpha i}
+
         Parameters
         ----------
         gs_coord : ndarray of shape (N, 3)
-            Ground state atomic coordinates (in meter).
+            Ground-state atomic coordinates (in meters).
         es_coord : ndarray of shape (N, 3)
-            Excited state atomic coordinates (in meter).
-        cell_parameters: ndarray of shape (3, 3)
-            Cell parameters (lattice constants) (in meter)
+            Excited-state atomic coordinates (in meters).
+        cell_parameters : ndarray of shape (3, 3)
+            Lattice vectors of the simulation cell (in meters).
+
+        Notes
+        -----
+        Displacements are wrapped back into the unit cell.
+        The computed Huang-Rhys factors are stored in ``self.hrf``.
         """
 
         inv_cell = np.linalg.inv(cell_parameters.T)
@@ -143,10 +169,12 @@ class hrf:
 
     @staticmethod
     def gaussian(x, mu, sigma):
-        """
+        r"""
         Compute the value of a Gaussian function.
 
-        :math:`G(x) = \\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\\frac{(x - \mu)^2}{2\sigma^2}}`
+        .. math::
+
+            G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
 
         Parameters
         ----------
@@ -171,24 +199,25 @@ class hrf:
 
     @staticmethod
     def f_sigma(freqs, sigma):
-        """
-        Compute a frequency-dependent linewidth function sigma(w_k) by linear interpolation.
+        r"""
+        Compute a frequency-dependent linewidth function by linear interpolation.
 
-        The linewidth is interpolated between two user-defined values:
+        .. math::
 
-            sigma(w_k) = sigma_0 + (sigma_1 - sigma_0) / (w_max - w_min) * (w_k - w_min)
+            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))
 
         Parameters
         ----------
         freqs : ndarray of shape (M,)
-            Phonon frequencies.
-        sigma : list or tuple of float
-            Two linewidth values [sigma_0, sigma_1] in meV, applied at the minimum and maximum frequency.
+            Phonon frequencies in rad/s.
+        sigma : list of float
+            Two-element list ``[sigma_0, sigma_1]`` in meV, giving the linewidth
+            at the minimum and maximum frequency.
 
         Returns
         -------
         collect_sigma : ndarray of shape (M,)
-            Interpolated linewidths sigma(w_k) for each mode (in meV).
+            Interpolated linewidths :math:`\sigma(\omega_k)` in meV.
         """
 
         collect_sigma = sigma[0] - (sigma[0] - sigma[1]) / (max(freqs) - min(freqs)) * (freqs - min(freqs))
@@ -196,26 +225,26 @@ class hrf:
 
 
     def compute_spectral_density(self, energy_axis, sigma):
-        """
-        Compute the phonon spectral density using Gaussian broadening.
+        r"""
+        Compute the phonon spectral density with Gaussian broadening.
 
-        The formula used is:
+        .. math::
 
-            S(hbar * w) = sum_k [ S_k * G(hbar * w, hbar * w_k, sigma(w_k)) ]
+            S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))
 
-        where G is a normalized Gaussian centered at each mode energy.
+        where :math:`G` is a normalized Gaussian.
 
         Parameters
         ----------
         energy_axis : ndarray of shape (N,)
-            Energy axis (in meV) over which to evaluate the spectral density.
-        sigma : list or tuple of float
-            Linewidth interpolation values [sigma_0, sigma_1] in meV used in Gaussian broadening.
+            Energy axis in meV over which to evaluate the spectral density.
+        sigma : list of float
+            Two-element list ``[sigma_0, sigma_1]`` in meV, used for linewidth interpolation.
 
         Returns
         -------
         spectral_density : ndarray of shape (N,)
-            Spectral density evaluated over the given energy axis (in 1 / meV).
+            Spectral density evaluated on the given energy axis (in 1/meV).
         """
 
         gfxns = np.zeros((self.nom, energy_axis.shape[0]))

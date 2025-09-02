@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual &mdash; pyPL 0.1.0 documentation</title>
+  <title>Manual &mdash; PyPL 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -35,7 +35,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            pyPL
+            PyPL
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,7 +64,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-pypl.lineshape">Line shape</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pypl.lineshape.lineshape"><code class="docutils literal notranslate"><span class="pre">lineshape</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.f_sigma"><code class="docutils literal notranslate"><span class="pre">lineshape.f_sigma()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.generate_fxn"><code class="docutils literal notranslate"><span class="pre">lineshape.generate_fxn()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.compute_lineshape_numerical_integration"><code class="docutils literal notranslate"><span class="pre">lineshape.compute_lineshape_numerical_integration()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.compute_lineshape_fft"><code class="docutils literal notranslate"><span class="pre">lineshape.compute_lineshape_fft()</span></code></a></li>
 </ul>
@@ -83,6 +82,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pypl.utils">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.utils.parse_atoms_qexml"><code class="docutils literal notranslate"><span class="pre">parse_atoms_qexml()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.utils.parse_forces_qexml"><code class="docutils literal notranslate"><span class="pre">parse_forces_qexml()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.utils.parse_phonopy_h5"><code class="docutils literal notranslate"><span class="pre">parse_phonopy_h5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.utils.parse_phonopy_yaml"><code class="docutils literal notranslate"><span class="pre">parse_phonopy_yaml()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="acknowledge.html">Credits</a></li>
@@ -94,7 +100,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pyPL</a>
+          <a href="index.html">PyPL</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -114,34 +120,54 @@
              
   <section id="manual">
 <span id="id1"></span><h1>Manual<a class="headerlink" href="#manual" title="Link to this heading"></a></h1>
-<p>The complete <strong>pyPL</strong> reference is reported below.</p>
+<p>The complete <strong>PyPL</strong> reference is reported below.</p>
 <section id="module-pypl.hrsolver">
 <span id="hr-solver"></span><h2>HR solver<a class="headerlink" href="#module-pypl.hrsolver" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pypl.hrsolver.HRsolver">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.hrsolver.</span></span><span class="sig-name descname"><span class="pre">HRsolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonopy_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forces_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_spectral_density">
-<span class="sig-name descname"><span class="pre">compute_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectral_density_energy_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.000e+00,</span> <span class="pre">1.000e-01,</span> <span class="pre">2.000e-01,</span> <span class="pre">...,</span> <span class="pre">1.998e+02,</span> <span class="pre">1.999e+02,</span> <span class="pre">2.000e+02])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_spectral_density" title="Link to this definition"></a></dt>
-<dd><p>Compute the phonon spectral density.</p>
-<dl class="simple">
-<dt>This function evaluates:</dt><dd><p>S(hbar * omega) = sum_k [ S_k * G(hbar * omega, hbar * omega_k, sigma_k) ]</p>
-</dd>
-</dl>
+<p>High-level solver for computing Huang–Rhys factors (HRFs), spectral density,
+and optical lineshapes from phonon and structural data.</p>
+<p>Depending on the inputs, HRFs are computed using either forces or displacements:</p>
+<ul class="simple">
+<li><p>Provide only <code class="docutils literal notranslate"><span class="pre">forces_file</span></code> for force-based HRFs.</p></li>
+<li><p>Provide both <code class="docutils literal notranslate"><span class="pre">gs_file</span></code> and <code class="docutils literal notranslate"><span class="pre">es_file</span></code> for displacement-based HRFs.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>spectral_density_energy_axis</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – Energy axis (in meV) over which to evaluate the spectral density.
-Defaults to np.linspace(0, 200, 2001), i.e., 0 to 200 meV in 0.1 meV steps.</p></li>
-<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth parameters [sigma_min, sigma_max] for frequency-dependent broadening (in meV).
-Defaults to [6, 1.5]</p></li>
+<li><p><strong>phonopy_file</strong> (<em>str</em>) – Path to Phonopy HDF5 file with phonon frequencies and eigenmodes.</p></li>
+<li><p><strong>forces_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to QE XML file with atomic forces.</p></li>
+<li><p><strong>gs_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to QE XML file with ground-state coordinates.</p></li>
+<li><p><strong>es_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to QE XML file with excited-state coordinates.</p></li>
+<li><p><strong>mass_list</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping element symbols to atomic masses (in atomic units).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the input combination is invalid (e.g. mixing force and displacement inputs).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_spectral_density">
+<span class="sig-name descname"><span class="pre">compute_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectral_density_energy_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_spectral_density" title="Link to this definition"></a></dt>
+<dd><p>Compute the phonon spectral density.</p>
+<div class="math notranslate nohighlight">
+\[S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))\]</div>
+<p>where <span class="math notranslate nohighlight">\(G\)</span> is a normalized Gaussian centered at each mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spectral_density_energy_axis</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – Energy axis (in meV). Defaults to <code class="docutils literal notranslate"><span class="pre">np.linspace(0,</span> <span class="pre">200,</span> <span class="pre">2001)</span></code>
+(0–200 meV in 0.1 meV steps).</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Two-element list <code class="docutils literal notranslate"><span class="pre">[sigma_min,</span> <span class="pre">sigma_max]</span></code> in meV for linewidth
+interpolation. Default is [6, 1.5].</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis used for the spectral density (in meV).</p></li>
-<li><p><strong>spectral_density</strong> (<em>ndarray</em>) – Computed spectral density at each energy point (in 1 / meV).</p></li>
+<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis in meV.</p></li>
+<li><p><strong>spectral_density</strong> (<em>ndarray</em>) – Computed spectral density (in 1/meV).</p></li>
 </ul>
 </p>
 </dd>
@@ -151,49 +177,59 @@ Defaults to [6, 1.5]</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_lineshape_numerical_integration">
 <span class="sig-name descname"><span class="pre">compute_lineshape_numerical_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">20000]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-150,</span> <span class="pre">550]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">701</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_lineshape_numerical_integration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_lineshape_numerical_integration" title="Link to this definition"></a></dt>
-<dd><p>Compute the temperature-dependent line shape function A(hbar * omega, T).</p>
+<dd><p>Compute the temperature-dependent optical lineshape via direct time-domain integration.</p>
+<div class="math notranslate nohighlight">
+\[A(\hbar \omega, T) = \int dt \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t, T)\]</div>
+<p>where <span class="math notranslate nohighlight">\(G(t, T)\)</span> is the generating function including phonon broadening.`gamma_mathrm{ZPL}` is the
+zero-phonon line (ZPL) broadening.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4 K.</p></li>
-<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</p></li>
-<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</p></li>
-<li><p><strong>time_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Time domain range [start, end] in femtoseconds. Default is [0, 20000] fs.</p></li>
-<li><p><strong>time_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of time points in the time axis. Default is 200001.</p></li>
-<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Energy range [start, end] in meV for computing the lineshape. Default is [-150, 550] meV.</p></li>
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values <code class="docutils literal notranslate"><span class="pre">[sigma_min,</span> <span class="pre">sigma_max]</span></code> in meV.
+Default is [6, 1.5].</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Additional Lorentzian broadening for the ZPL in meV. Default is 0.3.</p></li>
+<li><p><strong>time_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Time domain [start, end] in femtoseconds. Default is [0, 20000].</p></li>
+<li><p><strong>time_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of time points. Default is 200001.</p></li>
+<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Energy range [start, end] in meV. Default is [-150, 550].</p></li>
 <li><p><strong>lineshape_energy_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of points in the energy axis. Default is 701.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The result is stored in <code class="docutils literal notranslate"><span class="pre">self.lineshape</span></code> as a tuple
+<code class="docutils literal notranslate"><span class="pre">(energy_axis,</span> <span class="pre">A(E))</span></code> where <code class="docutils literal notranslate"><span class="pre">energy_axis</span></code> is in meV and
+<code class="docutils literal notranslate"><span class="pre">A(E)</span></code> is the computed lineshape.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_lineshape_fft">
 <span class="sig-name descname"><span class="pre">compute_lineshape_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-1000,</span> <span class="pre">1000]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_lineshape_fft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_lineshape_fft" title="Link to this definition"></a></dt>
-<dd><p>Compute the temperature-dependent line shape function A(hbar * omega, T).</p>
+<dd><p>Compute the temperature-dependent optical lineshape
+using FFT of the time-domain correlation function.</p>
+<div class="math notranslate nohighlight">
+\[A(\hbar\omega) = \frac{1}{2\pi\hbar} \!\int dt \exp \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t),\]</div>
+<p>where <span class="math notranslate nohighlight">\(G(t, T)\)</span> is the generating function with phonon broadening.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4 K.</p></li>
-<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</p></li>
-<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</p></li>
-<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Energy range [start, end] in meV for computing the lineshape. Default is [-1000, 1000] meV.</p></li>
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values <code class="docutils literal notranslate"><span class="pre">[sigma_min,</span> <span class="pre">sigma_max]</span></code> in meV.
+Default is [6, 1.5].</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Lorentzian broadening for the ZPL in meV. Default is 0.3.</p></li>
+<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Symmetric energy range [start, end] in meV.
+Must satisfy <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">=</span> <span class="pre">-end</span></code>. Default is [-1000, 1000].</p></li>
 <li><p><strong>lineshape_energy_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of points in the energy axis. Default is 2001.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">lineshape_energy_range</span></code> is not symmetric.</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The result is stored in <code class="docutils literal notranslate"><span class="pre">self.lineshape</span></code> as a tuple
+<code class="docutils literal notranslate"><span class="pre">(energy_axis,</span> <span class="pre">A(E))</span></code> where <code class="docutils literal notranslate"><span class="pre">energy_axis</span></code> is in meV and
+<code class="docutils literal notranslate"><span class="pre">A(E)</span></code> is the computed lineshape.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -203,16 +239,16 @@ Defaults to [6, 1.5]</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>spectrum_type</strong> (<em>str</em>) – Type of spectrum to compute. Options:
-- “PL” : photoluminescence spectrum
+<li><p><strong>spectrum_type</strong> (<em>str</em>) – Spectrum type:
+- “PL”: photoluminescence spectrum
 - “Abs”: absorption spectrum</p></li>
 <li><p><strong>ezpl</strong> (<em>float</em>) – Zero-phonon line (ZPL) energy in meV.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis (in meV) of the computed spectrum.</p></li>
-<li><p><strong>spectrum</strong> (<em>ndarray</em>) – Normalized spectral intensity over the energy axis.</p></li>
+<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis in meV.</p></li>
+<li><p><strong>spectrum</strong> (<em>ndarray</em>) – Normalized spectral intensity.</p></li>
 </ul>
 </p>
 </dd>
@@ -228,63 +264,81 @@ Defaults to [6, 1.5]</p></li>
 <dt class="sig sig-object py" id="pypl.lineshape.lineshape">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.lineshape.</span></span><span class="sig-name descname"><span class="pre">lineshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hrf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to compute optical lineshapes from Huang-Rhys factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hrf</strong> (<a class="reference internal" href="#pypl.hrf.hrf" title="pypl.hrf.hrf"><em>hrf.hrf</em></a>) – Instance of the <cite>hrf</cite> class containing phonon frequencies and Huang-Rhys factors.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.lineshape.lineshape.f_sigma">
 <span class="sig-name descname"><span class="pre">f_sigma</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.f_sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.f_sigma" title="Link to this definition"></a></dt>
-<dd><p>Calculate the broadening parameter <span class="math notranslate nohighlight">\(\sigma\)</span> for all phonons.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pypl.lineshape.lineshape.generate_fxn">
-<span class="sig-name descname"><span class="pre">generate_fxn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.generate_fxn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.generate_fxn" title="Link to this definition"></a></dt>
-<dd><p>Compute the generating function <span class="math notranslate nohighlight">\(G(t, T)\)</span>.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>(tuple): tuple containing:</dt><dd><p>real_gfxn (np.array): real part of <span class="math notranslate nohighlight">\(G(t, T)\)</span>.
-imag_gfxn (np.array): imag part of <span class="math notranslate nohighlight">\(G(t, T)\)</span>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dd><p>Compute phonon-dependent broadening parameters.</p>
+<p>The broadening is interpolated linearly between two given values
+across the range of phonon frequencies:</p>
+<div class="math notranslate nohighlight">
+\[\sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} \, (\omega_k - \min(\omega_k))\]</div>
+<p class="rubric">Notes</p>
+<p>The computed broadening parameters are stored in the attribute
+<code class="docutils literal notranslate"><span class="pre">self.all_sigma</span></code> (ndarray), which contains one value per phonon frequency.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.lineshape.lineshape.compute_lineshape_numerical_integration">
 <span class="sig-name descname"><span class="pre">compute_lineshape_numerical_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ene_axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.compute_lineshape_numerical_integration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.compute_lineshape_numerical_integration" title="Link to this definition"></a></dt>
-<dd><p>Compute the lineshape function <span class="math notranslate nohighlight">\(A(\hbar\omega, T)\)</span>.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>temp (float): temperature (K).
-sigma (list&lt;float&gt;): broadening parameter for Huang-Rhys factors (meV).
-lamba (float): broadening parameter for the zero-phonon line (meV).
-time_axis (np.array): time axis (fs).
-ene_axis (np.array): energy axis (meV).</p>
+<dd><p>Compute the lineshape function by direct numerical integration.</p>
+<p>The lineshape is defined as</p>
+<div class="math notranslate nohighlight">
+\[A(\hbar\omega, T) = \int dt \, G(t, T) \, e^{i \omega t},\]</div>
+<p>where the generating function <span class="math notranslate nohighlight">\(G(t, T)\)</span> is constructed from
+Huang-Rhys factors, phonon occupations, and broadening terms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em>) – Temperature in Kelvin.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em>) – Two-element list <code class="docutils literal notranslate"><span class="pre">[sigma0,</span> <span class="pre">sigma1]</span></code> giving phonon broadening
+parameters in meV.</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em>) – Zero-phonon line Lorentzian broadening (HWHM) in meV.</p></li>
+<li><p><strong>time_axis</strong> (<em>ndarray</em>) – Time axis in femtoseconds.</p></li>
+<li><p><strong>ene_axis</strong> (<em>ndarray</em>) – Energy axis in meV.</p></li>
+</ul>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The computed lineshape is stored in the attribute <code class="docutils literal notranslate"><span class="pre">self.lineshape</span></code>,
+a tuple <code class="docutils literal notranslate"><span class="pre">(energy_axis,</span> <span class="pre">A(E))</span></code> where <code class="docutils literal notranslate"><span class="pre">energy_axis</span></code> is in meV
+and <code class="docutils literal notranslate"><span class="pre">A(E)</span></code> is the computed lineshape.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.lineshape.lineshape.compute_lineshape_fft">
 <span class="sig-name descname"><span class="pre">compute_lineshape_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.compute_lineshape_fft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.compute_lineshape_fft" title="Link to this definition"></a></dt>
-<dd><p>Compute the lineshape function A(E, T) via time-domain correlation and FFT.</p>
-<p>This evaluates the time-domain correlation function:</p>
-<blockquote>
-<div><p>G(t) = exp[ S(t) - S(0) + 2*C(t) - 2*C(0) ] * exp( -<a href="#id2"><span class="problematic" id="id3">|t|</span></a> * gamma_zpl / hbar )</p>
-</div></blockquote>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p>S(t)  = sum_k S_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * exp( i * omega_k * t )</p></li>
-<li><p>C(t)  = sum_k S_k * n_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * cos( omega_k * t )</p></li>
-<li><p>gamma_zpl = ZPL Lorentzian broadening in meV</p></li>
+<dd><p>Compute the lineshape function by FFT of the time-domain correlation.</p>
+<p>The time-domain generating function is</p>
+<div class="math notranslate nohighlight">
+\[G(t) = \exp \Big[ S(t) - S(0) + 2C(t) - 2C(0) \Big],\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}S(t) &amp;= \sum_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) e^{i \omega_k t}, \\\\
+C(t) &amp;= \sum_k n_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) \cos(\omega_k t).\end{split}\]</div>
+<p>The frequency-domain lineshape is then obtained as</p>
+<div class="math notranslate nohighlight">
+\[A(\hbar\omega) = \frac{1}{2\pi\hbar} \!\int dt \exp \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t).\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em>) – Temperature in Kelvin.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em>) – Two-element list <code class="docutils literal notranslate"><span class="pre">[sigma0,</span> <span class="pre">sigma1]</span></code> for phonon broadening
+parameters (in meV).</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em>) – Zero-phonon line Lorentzian broadening (HWHM) in meV.</p></li>
+<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Target energy axis in meV.</p></li>
 </ul>
 </dd>
-<dt>Args:</dt><dd><p>temp (float): temperature (K)
-sigma (list of float): phonon broadening parameters in meV, e.g. [6.0, 1.5]
-zpl_broadening (float): zero-phonon line broadening (HWHM) in meV
-energy_axis (np.ndarray): target energy axis for FFT (in meV)</p>
-</dd>
-<dt>Sets:</dt><dd><p>self.lineshape: tuple (energy_axis_meV, A(E)), where A(E) is the lineshape.</p>
-</dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The computed lineshape is stored in the attribute <code class="docutils literal notranslate"><span class="pre">self.lineshape</span></code>,
+a tuple <code class="docutils literal notranslate"><span class="pre">(energy_axis,</span> <span class="pre">A(E))</span></code> where <code class="docutils literal notranslate"><span class="pre">energy_axis</span></code> is in meV
+and <code class="docutils literal notranslate"><span class="pre">A(E)</span></code> is the computed lineshape.</p>
 </dd></dl>
 
 </dd></dl>
@@ -296,56 +350,79 @@ energy_axis (np.ndarray): target energy axis for FFT (in meV)</p>
 <dt class="sig sig-object py" id="pypl.hrf.hrf">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.hrf.</span></span><span class="sig-name descname"><span class="pre">hrf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomic_symbols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to compute Huang-Rhys factors and spectral density from phonon
-frequencies, eigenmodes, and either forces or displacements. All inputs,
-except atomic mass, should be in the SI units.</p>
+<p>Compute Huang-Rhys factors and spectral density from phonon
+frequencies, eigenmodes, and either forces or displacements.
+All inputs, except atomic masses, should be in SI units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>freqs</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>3N</em><em>,</em><em>)</em>) – Phonon frequencies in rad/s.</p></li>
+<li><p><strong>modes</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>3N</em><em>, </em><em>N</em><em>, </em><em>3</em><em>)</em>) – Phonon eigenmodes.</p></li>
+<li><p><strong>atomic_symbols</strong> (<em>list</em><em> of </em><em>str</em>) – Atomic chemical symbols.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.set_masses">
 <span class="sig-name descname"><span class="pre">set_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.set_masses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.set_masses" title="Link to this definition"></a></dt>
-<dd><p>Set atomic masses in kg for all atoms in the system.</p>
+<dd><p>Set atomic masses in kilograms for all atoms in the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>mass_list</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping element symbols to atomic masses in unified atomic
 mass units (u). If not provided, IUPAC-recommended values are used.</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The converted atomic masses are stored in <code class="docutils literal notranslate"><span class="pre">self.masses</span></code> in kilograms.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.compute_hrf_forces">
 <span class="sig-name descname"><span class="pre">compute_hrf_forces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forces</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_hrf_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_hrf_forces" title="Link to this definition"></a></dt>
-<dd><p>Compute Huang-Rhys factors using forces.</p>
-<p><span class="math notranslate nohighlight">\(S_k = \frac{\omega_k \Delta Q_k^2}{2\hbar}\)</span></p>
-<p><span class="math notranslate nohighlight">\(\Delta Q_k = \frac{1}{\omega_k^2} \sum_{\alpha=1}^N \sum_{i=x,y,z} \frac{F_{\alpha i}}{\sqrt{M_{\alpha}}} e_{k, \alpha i}\)</span></p>
+<dd><p>Compute Huang-Rhys factors using atomic forces.</p>
+<div class="math notranslate nohighlight">
+\[S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\Delta Q_k = \frac{1}{\omega_k^2} \sum_{\alpha=1}^N \sum_{i=x,y,z} \frac{F_{\alpha i}}{\sqrt{M_\alpha}} e_{k, \alpha i}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>forces</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Force vector on each atom in (J / meter).</p>
+<dd class="field-odd"><p><strong>forces</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Forces on atoms in J/m (SI units).</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The computed Huang-Rhys factors are stored in <code class="docutils literal notranslate"><span class="pre">self.hrf</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.compute_hrf_dis">
 <span class="sig-name descname"><span class="pre">compute_hrf_dis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gs_coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_hrf_dis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_hrf_dis" title="Link to this definition"></a></dt>
-<dd><p>Compute Huang-Rhys factors using atomic displacement.</p>
-<p><span class="math notranslate nohighlight">\(S_k = \frac{\omega_k \Delta Q_k^2}{2\hbar}\)</span></p>
-<p><span class="math notranslate nohighlight">\(\Delta Q_k = \sum_{\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_{\alpha}} \Delta R_{\alpha i} e_{k, \alpha i}\)</span></p>
+<dd><p>Compute Huang-Rhys factors using atomic displacements.</p>
+<div class="math notranslate nohighlight">
+\[S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\Delta Q_k = \sum_{\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_\alpha} \Delta R_{\alpha i} e_{k, \alpha i}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gs_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Ground state atomic coordinates (in meter).</p></li>
-<li><p><strong>es_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Excited state atomic coordinates (in meter).</p></li>
-<li><p><strong>cell_parameters</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>3</em><em>, </em><em>3</em><em>)</em>) – Cell parameters (lattice constants) (in meter)</p></li>
+<li><p><strong>gs_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Ground-state atomic coordinates (in meters).</p></li>
+<li><p><strong>es_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Excited-state atomic coordinates (in meters).</p></li>
+<li><p><strong>cell_parameters</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>3</em><em>, </em><em>3</em><em>)</em>) – Lattice vectors of the simulation cell (in meters).</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Displacements are wrapped back into the unit cell.
+The computed Huang-Rhys factors are stored in <code class="docutils literal notranslate"><span class="pre">self.hrf</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.gaussian">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.gaussian" title="Link to this definition"></a></dt>
 <dd><p>Compute the value of a Gaussian function.</p>
-<p><span class="math notranslate nohighlight">\(G(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)</span></p>
+<div class="math notranslate nohighlight">
+\[G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -366,20 +443,19 @@ mass units (u). If not provided, IUPAC-recommended values are used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.f_sigma">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.f_sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.f_sigma" title="Link to this definition"></a></dt>
-<dd><p>Compute a frequency-dependent linewidth function sigma(w_k) by linear interpolation.</p>
-<p>The linewidth is interpolated between two user-defined values:</p>
-<blockquote>
-<div><p>sigma(w_k) = sigma_0 + (sigma_1 - sigma_0) / (w_max - w_min) * (w_k - w_min)</p>
-</div></blockquote>
+<dd><p>Compute a frequency-dependent linewidth function by linear interpolation.</p>
+<div class="math notranslate nohighlight">
+\[\sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>freqs</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>M</em><em>,</em><em>)</em>) – Phonon frequencies.</p></li>
-<li><p><strong>sigma</strong> (<em>list</em><em> or </em><em>tuple</em><em> of </em><em>float</em>) – Two linewidth values [sigma_0, sigma_1] in meV, applied at the minimum and maximum frequency.</p></li>
+<li><p><strong>freqs</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>M</em><em>,</em><em>)</em>) – Phonon frequencies in rad/s.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em>) – Two-element list <code class="docutils literal notranslate"><span class="pre">[sigma_0,</span> <span class="pre">sigma_1]</span></code> in meV, giving the linewidth
+at the minimum and maximum frequency.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>collect_sigma</strong> – Interpolated linewidths sigma(w_k) for each mode (in meV).</p>
+<dd class="field-even"><p><strong>collect_sigma</strong> – Interpolated linewidths <span class="math notranslate nohighlight">\(\sigma(\omega_k)\)</span> in meV.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (M,)</p>
@@ -390,21 +466,19 @@ mass units (u). If not provided, IUPAC-recommended values are used.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pypl.hrf.hrf.compute_spectral_density">
 <span class="sig-name descname"><span class="pre">compute_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_spectral_density" title="Link to this definition"></a></dt>
-<dd><p>Compute the phonon spectral density using Gaussian broadening.</p>
-<p>The formula used is:</p>
-<blockquote>
-<div><p>S(hbar * w) = sum_k [ S_k * G(hbar * w, hbar * w_k, sigma(w_k)) ]</p>
-</div></blockquote>
-<p>where G is a normalized Gaussian centered at each mode energy.</p>
+<dd><p>Compute the phonon spectral density with Gaussian broadening.</p>
+<div class="math notranslate nohighlight">
+\[S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))\]</div>
+<p>where <span class="math notranslate nohighlight">\(G\)</span> is a normalized Gaussian.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>energy_axis</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Energy axis (in meV) over which to evaluate the spectral density.</p></li>
-<li><p><strong>sigma</strong> (<em>list</em><em> or </em><em>tuple</em><em> of </em><em>float</em>) – Linewidth interpolation values [sigma_0, sigma_1] in meV used in Gaussian broadening.</p></li>
+<li><p><strong>energy_axis</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Energy axis in meV over which to evaluate the spectral density.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em>) – Two-element list <code class="docutils literal notranslate"><span class="pre">[sigma_0,</span> <span class="pre">sigma_1]</span></code> in meV, used for linewidth interpolation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>spectral_density</strong> – Spectral density evaluated over the given energy axis (in 1 / meV).</p>
+<dd class="field-even"><p><strong>spectral_density</strong> – Spectral density evaluated on the given energy axis (in 1/meV).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (N,)</p>
@@ -412,6 +486,98 @@ mass units (u). If not provided, IUPAC-recommended values are used.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+</section>
+<section id="module-pypl.utils">
+<span id="utils"></span><h2>Utils<a class="headerlink" href="#module-pypl.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pypl.utils.parse_atoms_qexml">
+<span class="sig-prename descclassname"><span class="pre">pypl.utils.</span></span><span class="sig-name descname"><span class="pre">parse_atoms_qexml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/utils.html#parse_atoms_qexml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.utils.parse_atoms_qexml" title="Link to this definition"></a></dt>
+<dd><p>Parse atomic structure information from a Quantum ESPRESSO XML output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fileName</strong> (<em>str</em>) – Path to the QE XML file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>atomic_symbols</strong> (<em>list of str</em>) – Atomic symbols for all atoms in the structure.</p></li>
+<li><p><strong>atomic_positions</strong> (<em>ndarray of shape (N, 3)</em>) – Cartesian atomic coordinates in Ångström.</p></li>
+<li><p><strong>cell_parameters</strong> (<em>ndarray of shape (3, 3)</em>) – Lattice vectors (cell parameters) in Ångström.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypl.utils.parse_forces_qexml">
+<span class="sig-prename descclassname"><span class="pre">pypl.utils.</span></span><span class="sig-name descname"><span class="pre">parse_forces_qexml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/utils.html#parse_forces_qexml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.utils.parse_forces_qexml" title="Link to this definition"></a></dt>
+<dd><p>Parse atomic forces from a Quantum ESPRESSO XML output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fileName</strong> (<em>str</em>) – Path to the QE XML file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>forces</strong> – Forces on atoms in eV/Å.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (N, 3)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the <cite>&lt;forces&gt;</cite> tag cannot be found in the XML file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypl.utils.parse_phonopy_h5">
+<span class="sig-prename descclassname"><span class="pre">pypl.utils.</span></span><span class="sig-name descname"><span class="pre">parse_phonopy_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/utils.html#parse_phonopy_h5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.utils.parse_phonopy_h5" title="Link to this definition"></a></dt>
+<dd><p>Parse phonon frequencies and eigenmodes from a Phonopy HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileName</strong> (<em>str</em>) – Path to the Phonopy HDF5 file (e.g., <code class="docutils literal notranslate"><span class="pre">phonon.hdf5</span></code>).</p></li>
+<li><p><strong>real_tol</strong> (<em>float</em><em>, </em><em>optional</em>) – Tolerance below which imaginary components of eigenmodes are discarded.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>freqs</strong> (<em>ndarray of shape (M,)</em>) – Phonon frequencies in THz.</p></li>
+<li><p><strong>modes</strong> (<em>ndarray of shape (M, Nat, 3)</em>) – Phonon eigenmodes. Converted to real if imaginary parts are negligible.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the imaginary part of eigenmodes exceeds <code class="docutils literal notranslate"><span class="pre">real_tol</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pypl.utils.parse_phonopy_yaml">
+<span class="sig-prename descclassname"><span class="pre">pypl.utils.</span></span><span class="sig-name descname"><span class="pre">parse_phonopy_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'band.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/utils.html#parse_phonopy_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.utils.parse_phonopy_yaml" title="Link to this definition"></a></dt>
+<dd><p>Parse phonon frequencies and eigenmodes from a Phonopy <code class="docutils literal notranslate"><span class="pre">band.yaml</span></code> file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileName</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to the <code class="docutils literal notranslate"><span class="pre">band.yaml</span></code> file. Default is <code class="docutils literal notranslate"><span class="pre">&quot;band.yaml&quot;</span></code>.</p></li>
+<li><p><strong>real_tol</strong> (<em>float</em><em>, </em><em>optional</em>) – Tolerance for discarding imaginary parts of eigenmodes.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>freqs</strong> (<em>ndarray of shape (3N,)</em>) – Phonon frequencies in THz.</p></li>
+<li><p><strong>modes</strong> (<em>ndarray of shape (3N, N, 3)</em>) – Phonon eigenmodes.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the imaginary component of any eigenvector exceeds <code class="docutils literal notranslate"><span class="pre">real_tol</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

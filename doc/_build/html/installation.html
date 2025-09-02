@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; pyPL 0.1.0 documentation</title>
+  <title>Installation &mdash; PyPL 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            pyPL
+            PyPL
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -62,7 +62,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pyPL</a>
+          <a href="index.html">PyPL</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -82,22 +82,29 @@
              
   <section id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<p>The recommendend installation method for <strong>pyPL</strong> is via python install.
+<p>The recommendend installation method for <strong>PyPL</strong> is via python install.
 The software is tested for python version 3.x and has the following dependencies:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">scipy</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">h5py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pyyaml</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>The dependencies will all be installed automatically, following instructions reported below.</p>
 <section id="source-code-installation">
 <h2>Source Code Installation<a class="headerlink" href="#source-code-installation" title="Link to this heading"></a></h2>
-<p>To install <strong>pyPL</strong> you need to execute:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>http://greatfire.uchicago.edu/
-$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>pyPL
-$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>install<span class="w"> </span>--user
+<p>To install <strong>PyPL</strong> you need to execute:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MICCoMPy/pypl.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>pypl
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>If using <strong>pip</strong> is not possible, one can manually install the above dependencies, and then add the directory of <strong>PyPL</strong> to the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable by, e.g.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bash shell as an example</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PYTHONPATH</span>:path/to/pypl
 </pre></div>
 </div>
 </section>

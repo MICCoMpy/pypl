@@ -4,12 +4,15 @@
 Installation
 ============
 
-The recommendend installation method for **pyPL** is via python install. 
+The recommendend installation method for **PyPL** is via python install. 
 The software is tested for python version 3.x and has the following dependencies: 
 
    - ``numpy``
    - ``scipy``
    - ``matplotlib``
+   - ``h5py``
+   - ``pyyaml``
+   
 
 The dependencies will all be installed automatically, following instructions reported below.  
 
@@ -17,11 +20,18 @@ The dependencies will all be installed automatically, following instructions rep
 Source Code Installation
 ========================
 
-To install **pyPL** you need to execute:  
+To install **PyPL** you need to execute:  
 
 .. code:: bash
 
-    $ git clone http://greatfire.uchicago.edu/
-    $ cd pyPL 
-    $ python setup.py install --user
+    $ git clone https://github.com/MICCoMPy/pypl.git
+    $ cd pypl
+    $ pip install .
+
+If using **pip** is not possible, one can manually install the above dependencies, and then add the directory of **PyPL** to the ``PYTHONPATH`` environment variable by, e.g.,
+
+.. code:: bash
+
+   # Bash shell as an example
+   $ export PYTHONPATH=$PYTHONPATH:path/to/pypl
 

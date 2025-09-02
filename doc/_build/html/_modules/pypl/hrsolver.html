@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypl.hrsolver &mdash; pyPL 0.1.0 documentation</title>
+  <title>pypl.hrsolver &mdash; PyPL 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            pyPL
+            PyPL
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -56,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pyPL</a>
+          <a href="../../index.html">PyPL</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,24 +85,35 @@
 <div class="viewcode-block" id="HRsolver">
 <a class="viewcode-back" href="../../manual.html#pypl.hrsolver.HRsolver">[docs]</a>
 <span class="k">class</span> <span class="nc">HRsolver</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    High-level solver for computing Huang–Rhys factors (HRFs), spectral density,</span>
+<span class="sd">    and optical lineshapes from phonon and structural data.</span>
+
+<span class="sd">    Depending on the inputs, HRFs are computed using either forces or displacements:</span>
+
+<span class="sd">    - Provide only ``forces_file`` for force-based HRFs.</span>
+<span class="sd">    - Provide both ``gs_file`` and ``es_file`` for displacement-based HRFs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phonopy_file : str</span>
+<span class="sd">        Path to Phonopy HDF5 file with phonon frequencies and eigenmodes.</span>
+<span class="sd">    forces_file : str, optional</span>
+<span class="sd">        Path to QE XML file with atomic forces.</span>
+<span class="sd">    gs_file : str, optional</span>
+<span class="sd">        Path to QE XML file with ground-state coordinates.</span>
+<span class="sd">    es_file : str, optional</span>
+<span class="sd">        Path to QE XML file with excited-state coordinates.</span>
+<span class="sd">    mass_list : dict, optional</span>
+<span class="sd">        Dictionary mapping element symbols to atomic masses (in atomic units).</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input combination is invalid (e.g. mixing force and displacement inputs).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phonopy_file</span><span class="p">,</span> <span class="n">forces_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gs_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">es_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mass_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the HRF object and determine whether to use forces or displacements to compute Huang-Rhys factors.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        phonopy_file : str</span>
-<span class="sd">            Path to the Phonopy HDF5 file containing phonon frequencies and modes.</span>
-<span class="sd">        forces_file : str, optional</span>
-<span class="sd">            Path to the QE xml file containing forces (used for force-based HRF computation).</span>
-<span class="sd">        gs_file : str, optional</span>
-<span class="sd">            Path to QE xml file for the ground-state geometry (used for displacement-based HRF).</span>
-<span class="sd">        es_file : str, optional</span>
-<span class="sd">            Path to the QE xml file for the excited-state geometry (used for displacement-based HRF).</span>
-<span class="sd">        mass_list : dict, optional</span>
-<span class="sd">            Dictionary mapping element symbols to atomic masses (in atomic units).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">freqs</span><span class="p">,</span> <span class="n">modes</span> <span class="o">=</span> <span class="n">parse_phonopy_h5</span><span class="p">(</span><span class="n">phonopy_file</span><span class="p">)</span>
 
@@ -157,29 +168,35 @@
 
 <div class="viewcode-block" id="HRsolver.compute_spectral_density">
 <a class="viewcode-back" href="../../manual.html#pypl.hrsolver.HRsolver.compute_spectral_density">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_spectral_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spectral_density_energy_axis</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">2001</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">compute_spectral_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spectral_density_energy_axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the phonon spectral density.</span>
 
-<span class="sd">        This function evaluates:</span>
-<span class="sd">            S(hbar * omega) = sum_k [ S_k * G(hbar * omega, hbar * omega_k, sigma_k) ]</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))</span>
+
+<span class="sd">        where :math:`G` is a normalized Gaussian centered at each mode.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        spectral_density_energy_axis : ndarray, optional</span>
-<span class="sd">            Energy axis (in meV) over which to evaluate the spectral density.</span>
-<span class="sd">            Defaults to np.linspace(0, 200, 2001), i.e., 0 to 200 meV in 0.1 meV steps.</span>
+<span class="sd">            Energy axis (in meV). Defaults to ``np.linspace(0, 200, 2001)``</span>
+<span class="sd">            (0–200 meV in 0.1 meV steps).</span>
 <span class="sd">        sigma : list of float, optional</span>
-<span class="sd">            Linewidth parameters [sigma_min, sigma_max] for frequency-dependent broadening (in meV).</span>
-<span class="sd">            Defaults to [6, 1.5]</span>
+<span class="sd">            Two-element list ``[sigma_min, sigma_max]`` in meV for linewidth</span>
+<span class="sd">            interpolation. Default is [6, 1.5].</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        energy_axis : ndarray</span>
-<span class="sd">            Energy axis used for the spectral density (in meV).</span>
+<span class="sd">            Energy axis in meV.</span>
 <span class="sd">        spectral_density : ndarray</span>
-<span class="sd">            Computed spectral density at each energy point (in 1 / meV).</span>
+<span class="sd">            Computed spectral density (in 1/meV).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">spectral_density_energy_axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">spectral_density_energy_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">2001</span><span class="p">)</span>
 
         <span class="n">spectral_density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">compute_spectral_density</span><span class="p">(</span><span class="n">spectral_density_energy_axis</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">spectral_density_energy_axis</span><span class="p">,</span> <span class="n">spectral_density</span></div>
@@ -191,30 +208,39 @@
     <span class="k">def</span> <span class="nf">compute_lineshape_numerical_integration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="n">zpl_broadening</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
                                                 <span class="n">time_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">time_resolution</span><span class="o">=</span><span class="mi">200001</span><span class="p">,</span>
                                                 <span class="n">lineshape_energy_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">550</span><span class="p">],</span> <span class="n">lineshape_energy_resolution</span><span class="o">=</span><span class="mi">701</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the temperature-dependent line shape function A(hbar * omega, T).</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the temperature-dependent optical lineshape via direct time-domain integration.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A(\hbar \omega, T) = \int dt \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t, T)</span>
+
+<span class="sd">        where :math:`G(t, T)` is the generating function including phonon broadening.`\gamma_\mathrm{ZPL}` is the</span>
+<span class="sd">        zero-phonon line (ZPL) broadening.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        temp : float, optional</span>
-<span class="sd">            Temperature in Kelvin. Default is 4 K.</span>
+<span class="sd">            Temperature in Kelvin. Default is 4.</span>
 <span class="sd">        sigma : list of float, optional</span>
-<span class="sd">            Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</span>
+<span class="sd">            Linewidth interpolation values ``[sigma_min, sigma_max]`` in meV.</span>
+<span class="sd">            Default is [6, 1.5].</span>
 <span class="sd">        zpl_broadening : float, optional</span>
-<span class="sd">            Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</span>
+<span class="sd">            Additional Lorentzian broadening for the ZPL in meV. Default is 0.3.</span>
 <span class="sd">        time_range : list of float, optional</span>
-<span class="sd">            Time domain range [start, end] in femtoseconds. Default is [0, 20000] fs.</span>
+<span class="sd">            Time domain [start, end] in femtoseconds. Default is [0, 20000].</span>
 <span class="sd">        time_resolution : int, optional</span>
-<span class="sd">            Number of time points in the time axis. Default is 200001.</span>
+<span class="sd">            Number of time points. Default is 200001.</span>
 <span class="sd">        lineshape_energy_range : list of float, optional</span>
-<span class="sd">            Energy range [start, end] in meV for computing the lineshape. Default is [-150, 550] meV.</span>
+<span class="sd">            Energy range [start, end] in meV. Default is [-150, 550].</span>
 <span class="sd">        lineshape_energy_resolution : int, optional</span>
 <span class="sd">            Number of points in the energy axis. Default is 701.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The result is stored in ``self.lineshape`` as a tuple</span>
+<span class="sd">        ``(energy_axis, A(E))`` where ``energy_axis`` is in meV and</span>
+<span class="sd">        ``A(E)`` is the computed lineshape.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">time_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">time_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">time_resolution</span><span class="p">)</span>
@@ -231,26 +257,41 @@
 <a class="viewcode-back" href="../../manual.html#pypl.hrsolver.HRsolver.compute_lineshape_fft">[docs]</a>
     <span class="k">def</span> <span class="nf">compute_lineshape_fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="n">zpl_broadening</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
                               <span class="n">lineshape_energy_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span> <span class="n">lineshape_energy_resolution</span><span class="o">=</span><span class="mi">2001</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the temperature-dependent line shape function A(hbar * omega, T).</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the temperature-dependent optical lineshape</span>
+<span class="sd">        using FFT of the time-domain correlation function.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A(\hbar\omega) = \frac{1}{2\pi\hbar} \!\int dt \exp \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t),</span>
+
+<span class="sd">        where :math:`G(t, T)` is the generating function with phonon broadening.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        temp : float, optional</span>
-<span class="sd">            Temperature in Kelvin. Default is 4 K.</span>
+<span class="sd">            Temperature in Kelvin. Default is 4.</span>
 <span class="sd">        sigma : list of float, optional</span>
-<span class="sd">            Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</span>
+<span class="sd">            Linewidth interpolation values ``[sigma_min, sigma_max]`` in meV.</span>
+<span class="sd">            Default is [6, 1.5].</span>
 <span class="sd">        zpl_broadening : float, optional</span>
-<span class="sd">            Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</span>
+<span class="sd">            Lorentzian broadening for the ZPL in meV. Default is 0.3.</span>
 <span class="sd">        lineshape_energy_range : list of float, optional</span>
-<span class="sd">            Energy range [start, end] in meV for computing the lineshape. Default is [-1000, 1000] meV.</span>
+<span class="sd">            Symmetric energy range [start, end] in meV.</span>
+<span class="sd">            Must satisfy ``start = -end``. Default is [-1000, 1000].</span>
 <span class="sd">        lineshape_energy_resolution : int, optional</span>
 <span class="sd">            Number of points in the energy axis. Default is 2001.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">            The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If ``lineshape_energy_range`` is not symmetric.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The result is stored in ``self.lineshape`` as a tuple</span>
+<span class="sd">        ``(energy_axis, A(E))`` where ``energy_axis`` is in meV and</span>
+<span class="sd">        ``A(E)`` is the computed lineshape.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lineshape_energy_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">lineshape_energy_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-8</span><span class="p">:</span>
@@ -273,8 +314,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        spectrum_type : str</span>
-<span class="sd">            Type of spectrum to compute. Options:</span>
-<span class="sd">            - &quot;PL&quot; : photoluminescence spectrum</span>
+<span class="sd">            Spectrum type:</span>
+<span class="sd">            - &quot;PL&quot;: photoluminescence spectrum</span>
 <span class="sd">            - &quot;Abs&quot;: absorption spectrum</span>
 <span class="sd">        ezpl : float</span>
 <span class="sd">            Zero-phonon line (ZPL) energy in meV.</span>
@@ -282,9 +323,9 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        energy_axis : ndarray</span>
-<span class="sd">            Energy axis (in meV) of the computed spectrum.</span>
+<span class="sd">            Energy axis in meV.</span>
 <span class="sd">        spectrum : ndarray</span>
-<span class="sd">            Normalized spectral intensity over the energy axis.</span>
+<span class="sd">            Normalized spectral intensity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># multiply the pre-coeffcient</span>

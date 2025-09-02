@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypl.lineshape &mdash; pyPL 0.1.0 documentation</title>
+  <title>pypl.lineshape &mdash; PyPL 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            pyPL
+            PyPL
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -56,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pyPL</a>
+          <a href="../../index.html">PyPL</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -84,13 +84,16 @@
 <div class="viewcode-block" id="lineshape">
 <a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape">[docs]</a>
 <span class="k">class</span> <span class="nc">lineshape</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to compute optical lineshapes from Huang-Rhys factors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hrf : hrf.hrf</span>
+<span class="sd">        Instance of the `hrf` class containing phonon frequencies and Huang-Rhys factors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hrf</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the lineshape class.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            hrf (.hrf.hrf): hrf class.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">hrf</span> <span class="o">=</span> <span class="n">hrf</span>
 
@@ -98,24 +101,73 @@
 <div class="viewcode-block" id="lineshape.f_sigma">
 <a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape.f_sigma">[docs]</a>
     <span class="k">def</span> <span class="nf">f_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the broadening parameter :math:`\sigma` for all phonons.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute phonon-dependent broadening parameters.</span>
+
+<span class="sd">        The broadening is interpolated linearly between two given values</span>
+<span class="sd">        across the range of phonon frequencies:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} \, (\omega_k - \min(\omega_k))</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The computed broadening parameters are stored in the attribute</span>
+<span class="sd">        ``self.all_sigma`` (ndarray), which contains one value per phonon frequency.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">all_sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">[:]</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_sigma</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">))</span>
+            <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">[:]</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">))</span>
+        <span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="lineshape.generate_fxn">
-<a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape.generate_fxn">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_fxn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the generating function :math:`G(t, T)`.</span>
+<div class="viewcode-block" id="lineshape.compute_lineshape_numerical_integration">
+<a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape.compute_lineshape_numerical_integration">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_lineshape_numerical_integration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">zpl_broadening</span><span class="p">,</span> <span class="n">time_axis</span><span class="p">,</span> <span class="n">ene_axis</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the lineshape function by direct numerical integration.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            (tuple): tuple containing:</span>
-<span class="sd">                real_gfxn (np.array): real part of :math:`G(t, T)`.</span>
-<span class="sd">                imag_gfxn (np.array): imag part of :math:`G(t, T)`.</span>
+<span class="sd">        The lineshape is defined as</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A(\hbar\omega, T) = \int dt \, G(t, T) \, e^{i \omega t},</span>
+
+<span class="sd">        where the generating function :math:`G(t, T)` is constructed from</span>
+<span class="sd">        Huang-Rhys factors, phonon occupations, and broadening terms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        temp : float</span>
+<span class="sd">            Temperature in Kelvin.</span>
+<span class="sd">        sigma : list of float</span>
+<span class="sd">            Two-element list ``[sigma0, sigma1]`` giving phonon broadening</span>
+<span class="sd">            parameters in meV.</span>
+<span class="sd">        zpl_broadening : float</span>
+<span class="sd">            Zero-phonon line Lorentzian broadening (HWHM) in meV.</span>
+<span class="sd">        time_axis : ndarray</span>
+<span class="sd">            Time axis in femtoseconds.</span>
+<span class="sd">        ene_axis : ndarray</span>
+<span class="sd">            Energy axis in meV.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The computed lineshape is stored in the attribute ``self.lineshape``,</span>
+<span class="sd">        a tuple ``(energy_axis, A(E))`` where ``energy_axis`` is in meV</span>
+<span class="sd">        and ``A(E)`` is the computed lineshape.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zpl_broadening</span> <span class="o">=</span> <span class="n">zpl_broadening</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span> <span class="o">=</span> <span class="n">time_axis</span> <span class="o">*</span> <span class="mf">1e-15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ene_axis</span> <span class="o">=</span> <span class="n">ene_axis</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_sigma</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ph_occ</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">hbar</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Boltzmann</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="n">ReS_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_sigma</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span><span class="n">constants</span><span class="o">.</span><span class="n">hbar</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
                  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]))</span>
@@ -133,40 +185,13 @@
 
             <span class="n">ReC_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">hrf</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ph_occ</span><span class="p">)</span>
 
-            <span class="n">real_gfxn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_t</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
-            <span class="n">imag_gfxn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_t</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
+            <span class="n">gr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_t</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
+            <span class="n">gi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_t</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ReC_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
 
-            <span class="n">real_gfxn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
-            <span class="n">imag_gfxn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">real_gfxn</span><span class="p">,</span> <span class="n">imag_gfxn</span></div>
-
-
-
-<div class="viewcode-block" id="lineshape.compute_lineshape_numerical_integration">
-<a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape.compute_lineshape_numerical_integration">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_lineshape_numerical_integration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">zpl_broadening</span><span class="p">,</span> <span class="n">time_axis</span><span class="p">,</span> <span class="n">ene_axis</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the lineshape function :math:`A(\hbar\omega, T)`.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            temp (float): temperature (K).</span>
-<span class="sd">            sigma (list&lt;float&gt;): broadening parameter for Huang-Rhys factors (meV).</span>
-<span class="sd">            lamba (float): broadening parameter for the zero-phonon line (meV).</span>
-<span class="sd">            time_axis (np.array): time axis (fs).</span>
-<span class="sd">            ene_axis (np.array): energy axis (meV).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zpl_broadening</span> <span class="o">=</span> <span class="n">zpl_broadening</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span> <span class="o">=</span> <span class="n">time_axis</span> <span class="o">*</span> <span class="mf">1e-15</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ene_axis</span> <span class="o">=</span> <span class="n">ene_axis</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mf">1e-3</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">f_sigma</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ph_occ</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hrf</span><span class="o">.</span><span class="n">freqs</span> <span class="o">*</span> <span class="n">constants</span><span class="o">.</span><span class="n">hbar</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Boltzmann</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">gr</span><span class="p">,</span> <span class="n">gi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fxn</span><span class="p">()</span>
+            <span class="n">gr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
+            <span class="n">gi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ReS_t</span> <span class="o">-</span> <span class="n">ReS_0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ImS_t</span><span class="p">)</span>
 
         <span class="n">ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_axis</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">zpl_broadening</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">hbar</span><span class="p">))</span>
 
@@ -179,6 +204,9 @@
  
         <span class="c1"># unit from Joule to meV</span>
         <span class="n">new_ene_axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ene_axis</span> <span class="o">/</span> <span class="n">constants</span><span class="o">.</span><span class="n">eV</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Integral check:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lineshape</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_ene_axis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">new_ene_axis</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">lineshape</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_ene_axis</span><span class="p">,</span> <span class="n">lineshape</span><span class="p">)</span></div>
 
 
@@ -186,26 +214,45 @@
 <div class="viewcode-block" id="lineshape.compute_lineshape_fft">
 <a class="viewcode-back" href="../../manual.html#pypl.lineshape.lineshape.compute_lineshape_fft">[docs]</a>
     <span class="k">def</span> <span class="nf">compute_lineshape_fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">zpl_broadening</span><span class="p">,</span> <span class="n">energy_axis</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the lineshape function A(E, T) via time-domain correlation and FFT.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the lineshape function by FFT of the time-domain correlation.</span>
 
-<span class="sd">        This evaluates the time-domain correlation function:</span>
+<span class="sd">        The time-domain generating function is</span>
 
-<span class="sd">            G(t) = exp[ S(t) - S(0) + 2*C(t) - 2*C(0) ] * exp( -|t| * gamma_zpl / hbar )</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">        where:</span>
-<span class="sd">            - S(t)  = sum_k S_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * exp( i * omega_k * t )</span>
-<span class="sd">            - C(t)  = sum_k S_k * n_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * cos( omega_k * t )</span>
-<span class="sd">            - gamma_zpl = ZPL Lorentzian broadening in meV</span>
+<span class="sd">            G(t) = \exp \Big[ S(t) - S(0) + 2C(t) - 2C(0) \Big],</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            temp (float): temperature (K)</span>
-<span class="sd">            sigma (list of float): phonon broadening parameters in meV, e.g. [6.0, 1.5]</span>
-<span class="sd">            zpl_broadening (float): zero-phonon line broadening (HWHM) in meV</span>
-<span class="sd">            energy_axis (np.ndarray): target energy axis for FFT (in meV)</span>
+<span class="sd">        where</span>
 
-<span class="sd">        Sets:</span>
-<span class="sd">            self.lineshape: tuple (energy_axis_meV, A(E)), where A(E) is the lineshape.</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            S(t) &amp;= \sum_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) e^{i \omega_k t}, \\\\</span>
+<span class="sd">            C(t) &amp;= \sum_k n_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) \cos(\omega_k t).</span>
+
+<span class="sd">        The frequency-domain lineshape is then obtained as</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A(\hbar\omega) = \frac{1}{2\pi\hbar} \!\int dt \exp \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        temp : float</span>
+<span class="sd">            Temperature in Kelvin.</span>
+<span class="sd">        sigma : list of float</span>
+<span class="sd">            Two-element list ``[sigma0, sigma1]`` for phonon broadening</span>
+<span class="sd">            parameters (in meV).</span>
+<span class="sd">        zpl_broadening : float</span>
+<span class="sd">            Zero-phonon line Lorentzian broadening (HWHM) in meV.</span>
+<span class="sd">        energy_axis : ndarray</span>
+<span class="sd">            Target energy axis in meV.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The computed lineshape is stored in the attribute ``self.lineshape``,</span>
+<span class="sd">        a tuple ``(energy_axis, A(E))`` where ``energy_axis`` is in meV</span>
+<span class="sd">        and ``A(E)`` is the computed lineshape.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span>

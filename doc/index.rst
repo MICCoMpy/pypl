@@ -1,15 +1,13 @@
-.. pyPL documentation master file
+.. PyPL documentation master file
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyPL's documentation!
+Welcome to PyPL's documentation!
 ==================================
 
-.. .. important::
+.. important::
 
-    This is documentation for the **pyPL** *package*, which is part of the WEST_ framework.
-
-.. _WEST: http://www.west-code.org
+    This is documentation for the **PyPL** package.
 
 Contents
 --------
@@ -28,13 +26,13 @@ Contents
 .. glossary::
 
     :ref:`overview`
-      An illustration of **pyPL**.
+      An illustration of **PyPL**.
 
     :ref:`installation`
-      Instructions on how to install the **pyPL** package.
+      Instructions on how to install the **PyPL** package.
 
     :ref:`Tutorial`
-      Compact demonstration of usage of **pyPL** for computing vibrationally resolved photoluminescence and absorption spectra of point defects.
+      Compact demonstration of usage of **PyPL** for computing vibrationally resolved photoluminescence and absorption spectra of point defects.
 
     :ref:`manual`
       The complete reference.
@@ -44,7 +42,8 @@ Contents
 
 .. note::
 
-   To get help using the **pyPL** package, send an email to `jinyuchem@uchicago.edu <mailto:jinyuchem@uchicago.edu>`_.
+   To get help using the **PyPL** package, send an email to `jinyuchem@uchicago.edu <mailto:jinyuchem@uchicago.edu>`_.
 
-The **pyPL** package is hosted on `GitLab <http://greatfire.uchicago.edu/photoluminescence/PL>`_, mirrored to `GitHub <https://github.com/west-code-development/>`_, and licensed under the open-source GPLv3 license.
+
+The **PyPL** package is hosted on `Github <https://github.com/MICCoMpy/pypl>`_ and licensed under the open-source MIT license.
 

@@ -10,7 +10,7 @@ bohr2ang = 0.529177210903
 
 def parse_atoms_qexml(fileName):
     """
-    Parse atomic structure information from a Quantum ESPRESSO QE XML output file.
+    Parse atomic structure information from a Quantum ESPRESSO XML output file.
 
     Parameters
     ----------
@@ -20,10 +20,10 @@ def parse_atoms_qexml(fileName):
     Returns
     -------
     atomic_symbols : list of str
-        List of atomic symbols for all atoms in the structure.
-    atomic_positions : numpy.ndarray of shape (N, 3)
+        Atomic symbols for all atoms in the structure.
+    atomic_positions : ndarray of shape (N, 3)
         Cartesian atomic coordinates in Ångström.
-    cell_parameters : numpy.ndarray of shape (3, 3)
+    cell_parameters : ndarray of shape (3, 3)
         Lattice vectors (cell parameters) in Ångström.
     """
 
@@ -53,7 +53,7 @@ def parse_atoms_qexml(fileName):
 
 def parse_forces_qexml(fileName):
     """
-    Parse atomic forces from a Quantum ESPRESSO QE XML output file.
+    Parse atomic forces from a Quantum ESPRESSO XML output file.
 
     Parameters
     ----------
@@ -62,8 +62,13 @@ def parse_forces_qexml(fileName):
 
     Returns
     -------
-    forces : numpy.ndarray of shape (N, 3)
-        Forces on atoms in eV / Ångström.
+    forces : ndarray of shape (N, 3)
+        Forces on atoms in eV/Å.
+    
+    Raises
+    ------
+    ValueError
+        If the `<forces>` tag cannot be found in the XML file.
     """
 
     tree = ET.parse(fileName)
@@ -86,10 +91,10 @@ def parse_phonopy_h5(fileName, real_tol=1e-10):
     Parameters
     ----------
     fileName : str
-        Path to the Phonopy HDF5 file (e.g., phonon.hdf5).
+        Path to the Phonopy HDF5 file (e.g., ``phonon.hdf5``).
     real_tol : float, optional
         Tolerance below which imaginary components of eigenmodes are discarded.
-        Default is 1e-10.
+        Default is ``1e-10``.
 
     Returns
     -------
@@ -97,6 +102,11 @@ def parse_phonopy_h5(fileName, real_tol=1e-10):
         Phonon frequencies in THz.
     modes : ndarray of shape (M, Nat, 3)
         Phonon eigenmodes. Converted to real if imaginary parts are negligible.
+    
+    Raises
+    ------
+    ValueError
+        If the imaginary part of eigenmodes exceeds ``real_tol``.
     """
 
     with h5py.File(fileName, "r") as f:
@@ -116,19 +126,27 @@ def parse_phonopy_h5(fileName, real_tol=1e-10):
 
 def parse_phonopy_yaml(fileName="band.yaml", real_tol=1e-10):
     """
-    Parse phonon frequencies and eigenmodes from a Phonopy band.yaml file.
+    Parse phonon frequencies and eigenmodes from a Phonopy ``band.yaml`` file.
 
     Parameters
     ----------
-    filename : str, optional
-        Path to the band.yaml file (default is "band.yaml").
+    fileName : str, optional
+        Path to the ``band.yaml`` file. Default is ``"band.yaml"``.
+    real_tol : float, optional
+        Tolerance for discarding imaginary parts of eigenmodes.
+        Default is ``1e-10``.
 
     Returns
     -------
-    frequencies : ndarray of shape (3N,)
+    freqs : ndarray of shape (3N,)
         Phonon frequencies in THz.
     modes : ndarray of shape (3N, N, 3)
         Phonon eigenmodes.
+    
+    Raises
+    ------
+    ValueError
+        If the imaginary component of any eigenvector exceeds ``real_tol``.
     """
 
     with open(fileName, 'r') as f:

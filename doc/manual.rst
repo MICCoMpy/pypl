@@ -3,7 +3,7 @@
 Manual
 ======
 
-The complete **pyPL** reference is reported below.
+The complete **PyPL** reference is reported below.
 
 
 HR solver
@@ -30,10 +30,10 @@ Huang-Rhys factors
     :undoc-members:
     :show-inheritance:
 
-.. IO
-.. --
+Utils
+-----
 
-.. .. automodule:: pypl.io
+.. automodule:: pypl.utils
     :members:
     :undoc-members:
     :show-inheritance:

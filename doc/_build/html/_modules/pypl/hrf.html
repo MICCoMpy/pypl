@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pypl.hrf &mdash; pyPL 0.1.0 documentation</title>
+  <title>pypl.hrf &mdash; PyPL 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            pyPL
+            PyPL
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -56,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pyPL</a>
+          <a href="../../index.html">PyPL</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -84,24 +84,21 @@
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf">[docs]</a>
 <span class="k">class</span> <span class="nc">hrf</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class to compute Huang-Rhys factors and spectral density from phonon</span>
-<span class="sd">    frequencies, eigenmodes, and either forces or displacements. All inputs,</span>
-<span class="sd">    except atomic mass, should be in the SI units.</span>
+<span class="sd">    Compute Huang-Rhys factors and spectral density from phonon</span>
+<span class="sd">    frequencies, eigenmodes, and either forces or displacements.</span>
+<span class="sd">    All inputs, except atomic masses, should be in SI units.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    freqs : ndarray of shape (3N,)</span>
+<span class="sd">        Phonon frequencies in rad/s.</span>
+<span class="sd">    modes : ndarray of shape (3N, N, 3)</span>
+<span class="sd">        Phonon eigenmodes.</span>
+<span class="sd">    atomic_symbols : list of str</span>
+<span class="sd">        Atomic chemical symbols.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">modes</span><span class="p">,</span> <span class="n">atomic_symbols</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the HRF object.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        freqs : ndarray of shape (3N,)</span>
-<span class="sd">            Phonon frequencies (in rad/s).</span>
-<span class="sd">        modes : ndarray of shape (3N, N, 3)</span>
-<span class="sd">            Phonon eigenmodes.</span>
-<span class="sd">        atomic_symbols : list of str</span>
-<span class="sd">            List of atomic chemical symbols.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">freqs</span> <span class="o">=</span> <span class="n">freqs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="n">modes</span>
@@ -121,13 +118,17 @@
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.set_masses">[docs]</a>
     <span class="k">def</span> <span class="nf">set_masses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mass_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set atomic masses in kg for all atoms in the system.</span>
+<span class="sd">        Set atomic masses in kilograms for all atoms in the system.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        mass_list : dict, optional</span>
 <span class="sd">            Dictionary mapping element symbols to atomic masses in unified atomic</span>
 <span class="sd">            mass units (u). If not provided, IUPAC-recommended values are used.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The converted atomic masses are stored in ``self.masses`` in kilograms.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">default_mass_list</span> <span class="o">=</span> <span class="n">mass_list</span> <span class="o">=</span> <span class="p">{</span>
@@ -168,15 +169,27 @@
 <div class="viewcode-block" id="hrf.compute_hrf_forces">
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.compute_hrf_forces">[docs]</a>
     <span class="k">def</span> <span class="nf">compute_hrf_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forces</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute Huang-Rhys factors using forces.\n</span>
-<span class="sd">        :math:`S_k = \\frac{\omega_k \Delta Q_k^2}{2\hbar}`\n</span>
-<span class="sd">        :math:`\Delta Q_k = \\frac{1}{\omega_k^2} \sum_{\\alpha=1}^N \sum_{i=x,y,z} \\frac{F_{\\alpha i}}{\sqrt{M_{\\alpha}}} e_{k, \\alpha i}`</span>
-<span class="sd">        </span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute Huang-Rhys factors using atomic forces.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}</span>
+
+<span class="sd">        where</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \Delta Q_k = \frac{1}{\omega_k^2} \sum_{\alpha=1}^N \sum_{i=x,y,z} \frac{F_{\alpha i}}{\sqrt{M_\alpha}} e_{k, \alpha i}</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        forces : ndarray of shape (N, 3)</span>
-<span class="sd">            Force vector on each atom in (J / meter).</span>
+<span class="sd">            Forces on atoms in J/m (SI units).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The computed Huang-Rhys factors are stored in ``self.hrf``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">mass_forces</span> <span class="o">=</span> <span class="n">forces</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">masses</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
@@ -194,19 +207,32 @@
 <div class="viewcode-block" id="hrf.compute_hrf_dis">
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.compute_hrf_dis">[docs]</a>
     <span class="k">def</span> <span class="nf">compute_hrf_dis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gs_coord</span><span class="p">,</span> <span class="n">es_coord</span><span class="p">,</span> <span class="n">cell_parameters</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute Huang-Rhys factors using atomic displacement.\n</span>
-<span class="sd">        :math:`S_k = \\frac{\omega_k \Delta Q_k^2}{2\hbar}`\n</span>
-<span class="sd">        :math:`\Delta Q_k = \sum_{\\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_{\\alpha}} \Delta R_{\\alpha i} e_{k, \\alpha i}`</span>
-<span class="sd">        </span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute Huang-Rhys factors using atomic displacements.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            S_k = \frac{\omega_k \Delta Q_k^2}{2 \hbar}</span>
+
+<span class="sd">        with</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \Delta Q_k = \sum_{\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_\alpha} \Delta R_{\alpha i} e_{k, \alpha i}</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        gs_coord : ndarray of shape (N, 3)</span>
-<span class="sd">            Ground state atomic coordinates (in meter).</span>
+<span class="sd">            Ground-state atomic coordinates (in meters).</span>
 <span class="sd">        es_coord : ndarray of shape (N, 3)</span>
-<span class="sd">            Excited state atomic coordinates (in meter).</span>
-<span class="sd">        cell_parameters: ndarray of shape (3, 3)</span>
-<span class="sd">            Cell parameters (lattice constants) (in meter)</span>
+<span class="sd">            Excited-state atomic coordinates (in meters).</span>
+<span class="sd">        cell_parameters : ndarray of shape (3, 3)</span>
+<span class="sd">            Lattice vectors of the simulation cell (in meters).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Displacements are wrapped back into the unit cell.</span>
+<span class="sd">        The computed Huang-Rhys factors are stored in ``self.hrf``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">inv_cell</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cell_parameters</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -233,10 +259,12 @@
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.gaussian">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the value of a Gaussian function.</span>
 
-<span class="sd">        :math:`G(x) = \\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\\frac{(x - \mu)^2}{2\sigma^2}}`</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -264,24 +292,25 @@
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.f_sigma">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">f_sigma</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute a frequency-dependent linewidth function sigma(w_k) by linear interpolation.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute a frequency-dependent linewidth function by linear interpolation.</span>
 
-<span class="sd">        The linewidth is interpolated between two user-defined values:</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">            sigma(w_k) = sigma_0 + (sigma_1 - sigma_0) / (w_max - w_min) * (w_k - w_min)</span>
+<span class="sd">            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        freqs : ndarray of shape (M,)</span>
-<span class="sd">            Phonon frequencies.</span>
-<span class="sd">        sigma : list or tuple of float</span>
-<span class="sd">            Two linewidth values [sigma_0, sigma_1] in meV, applied at the minimum and maximum frequency.</span>
+<span class="sd">            Phonon frequencies in rad/s.</span>
+<span class="sd">        sigma : list of float</span>
+<span class="sd">            Two-element list ``[sigma_0, sigma_1]`` in meV, giving the linewidth</span>
+<span class="sd">            at the minimum and maximum frequency.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        collect_sigma : ndarray of shape (M,)</span>
-<span class="sd">            Interpolated linewidths sigma(w_k) for each mode (in meV).</span>
+<span class="sd">            Interpolated linewidths :math:`\sigma(\omega_k)` in meV.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">collect_sigma</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">sigma</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">freqs</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">freqs</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">freqs</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">freqs</span><span class="p">))</span>
@@ -292,26 +321,26 @@
 <div class="viewcode-block" id="hrf.compute_spectral_density">
 <a class="viewcode-back" href="../../manual.html#pypl.hrf.hrf.compute_spectral_density">[docs]</a>
     <span class="k">def</span> <span class="nf">compute_spectral_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy_axis</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the phonon spectral density using Gaussian broadening.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the phonon spectral density with Gaussian broadening.</span>
 
-<span class="sd">        The formula used is:</span>
+<span class="sd">        .. math::</span>
 
-<span class="sd">            S(hbar * w) = sum_k [ S_k * G(hbar * w, hbar * w_k, sigma(w_k)) ]</span>
+<span class="sd">            S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))</span>
 
-<span class="sd">        where G is a normalized Gaussian centered at each mode energy.</span>
+<span class="sd">        where :math:`G` is a normalized Gaussian.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        energy_axis : ndarray of shape (N,)</span>
-<span class="sd">            Energy axis (in meV) over which to evaluate the spectral density.</span>
-<span class="sd">        sigma : list or tuple of float</span>
-<span class="sd">            Linewidth interpolation values [sigma_0, sigma_1] in meV used in Gaussian broadening.</span>
+<span class="sd">            Energy axis in meV over which to evaluate the spectral density.</span>
+<span class="sd">        sigma : list of float</span>
+<span class="sd">            Two-element list ``[sigma_0, sigma_1]`` in meV, used for linewidth interpolation.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        spectral_density : ndarray of shape (N,)</span>
-<span class="sd">            Spectral density evaluated over the given energy axis (in 1 / meV).</span>
+<span class="sd">            Spectral density evaluated on the given energy axis (in 1/meV).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">gfxns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nom</span><span class="p">,</span> <span class="n">energy_axis</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>

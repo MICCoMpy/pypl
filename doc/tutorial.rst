@@ -3,13 +3,13 @@
 Tutorials
 =========
 
-These tutorials demonstrate how to utilize core features of **pyPL**. 
+These tutorials demonstrate how to utilize core features of **PyPL**. 
 
 Contents:
 
 .. toctree::
    :maxdepth: 1
 
-   tutorials/pyPL_100.ipynb
-   tutorials/pyPL_200.ipynb
+   tutorials/PyPL_100.ipynb
+   tutorials/PyPL_200.ipynb
 

@@ -3,7 +3,7 @@
 Overview
 ========
 
-**pyPL** is designed to compute vibrationally resolved spectra of point defects.
+**PyPL** is designed to compute vibrationally resolved spectra of point defects.
 
 Features: 
 

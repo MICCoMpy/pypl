@@ -5,33 +5,85 @@ import warnings
 
 
 class lineshape:
+    """
+    Class to compute optical lineshapes from Huang-Rhys factors.
+
+    Parameters
+    ----------
+    hrf : hrf.hrf
+        Instance of the `hrf` class containing phonon frequencies and Huang-Rhys factors.
+    """
 
     def __init__(self, hrf):
-        """Initialize the lineshape class.
-
-        Args:
-            hrf (.hrf.hrf): hrf class.
-        """
 
         self.hrf = hrf
 
 
     def f_sigma(self):
+        r"""
+        Compute phonon-dependent broadening parameters.
+
+        The broadening is interpolated linearly between two given values
+        across the range of phonon frequencies:
+
+        .. math::
+
+            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} \, (\omega_k - \min(\omega_k))
+
+        Notes
+        -----
+        The computed broadening parameters are stored in the attribute
+        ``self.all_sigma`` (ndarray), which contains one value per phonon frequency.
         """
-        Calculate the broadening parameter :math:`\sigma` for all phonons.
+
+        self.all_sigma = (
+            self.sigma[0] - (self.sigma[0] - self.sigma[1])
+            / (max(self.hrf.freqs) - min(self.hrf.freqs))
+            * (self.hrf.freqs[:] - min(self.hrf.freqs))
+        )
+
+
+    def compute_lineshape_numerical_integration(self, temp, sigma, zpl_broadening, time_axis, ene_axis):
+        r"""
+        Compute the lineshape function by direct numerical integration.
+
+        The lineshape is defined as
+
+        .. math::
+
+            A(\hbar\omega, T) = \int dt \, G(t, T) \, e^{i \omega t},
+
+        where the generating function :math:`G(t, T)` is constructed from
+        Huang-Rhys factors, phonon occupations, and broadening terms.
+
+        Parameters
+        ----------
+        temp : float
+            Temperature in Kelvin.
+        sigma : list of float
+            Two-element list ``[sigma0, sigma1]`` giving phonon broadening
+            parameters in meV.
+        zpl_broadening : float
+            Zero-phonon line Lorentzian broadening (HWHM) in meV.
+        time_axis : ndarray
+            Time axis in femtoseconds.
+        ene_axis : ndarray
+            Energy axis in meV.
+
+        Notes
+        -----
+        The computed lineshape is stored in the attribute ``self.lineshape``,
+        a tuple ``(energy_axis, A(E))`` where ``energy_axis`` is in meV
+        and ``A(E)`` is the computed lineshape.
         """
 
-        self.all_sigma = self.sigma[0] - (self.sigma[0] - self.sigma[1]) / (max(self.hrf.freqs) - min(self.hrf.freqs)) * (self.hrf.freqs[:] - min(self.hrf.freqs))
-
-
-    def generate_fxn(self):
-        """Compute the generating function :math:`G(t, T)`.
-
-        Returns:
-            (tuple): tuple containing:
-                real_gfxn (np.array): real part of :math:`G(t, T)`.
-                imag_gfxn (np.array): imag part of :math:`G(t, T)`.
-        """
+        self.temp = temp
+        self.sigma = np.array(sigma) * constants.eV * 1e-3
+        self.zpl_broadening = zpl_broadening * constants.eV * 1e-3
+        self.time_axis = time_axis * 1e-15
+        self.ene_axis = ene_axis * constants.eV * 1e-3
+        self.f_sigma()
+        self.ph_occ = 1 / (np.exp((self.hrf.freqs * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
 
         ReS_t = (np.exp(-self.time_axis[None, :]**2 * self.all_sigma[:, None]**2 / 2 /constants.hbar**2)
                  * np.cos(self.hrf.freqs[:, None] * self.time_axis[None, :]))
@@ -49,37 +101,13 @@ class lineshape:
 
             ReC_0 = np.sum(self.hrf.hrf * self.ph_occ)
 
-            real_gfxn = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.cos(ImS_t)
-            imag_gfxn = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.sin(ImS_t)
+            gr = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.cos(ImS_t)
+            gi = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.sin(ImS_t)
 
         elif abs(self.temp) < 1e-8:
 
-            real_gfxn = np.exp(ReS_t - ReS_0) * np.cos(ImS_t)
-            imag_gfxn = np.exp(ReS_t - ReS_0) * np.sin(ImS_t)
-
-        return real_gfxn, imag_gfxn
-
-
-    def compute_lineshape_numerical_integration(self, temp, sigma, zpl_broadening, time_axis, ene_axis):
-        """
-        Compute the lineshape function :math:`A(\hbar\omega, T)`.
-
-        Args:
-            temp (float): temperature (K).
-            sigma (list<float>): broadening parameter for Huang-Rhys factors (meV).
-            lamba (float): broadening parameter for the zero-phonon line (meV).
-            time_axis (np.array): time axis (fs).
-            ene_axis (np.array): energy axis (meV).
-        """
-        self.temp = temp
-        self.sigma = np.array(sigma) * constants.eV * 1e-3
-        self.zpl_broadening = zpl_broadening * constants.eV * 1e-3
-        self.time_axis = time_axis * 1e-15
-        self.ene_axis = ene_axis * constants.eV * 1e-3
-        self.f_sigma()
-        self.ph_occ = 1 / (np.exp((self.hrf.freqs * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
-
-        gr, gi = self.generate_fxn()
+            gr = np.exp(ReS_t - ReS_0) * np.cos(ImS_t)
+            gi = np.exp(ReS_t - ReS_0) * np.sin(ImS_t)
 
         ex = np.exp( - (np.abs(self.time_axis) * self.zpl_broadening / constants.hbar))
 
@@ -92,30 +120,52 @@ class lineshape:
  
         # unit from Joule to meV
         new_ene_axis = self.ene_axis / constants.eV * 1000
+
+        print('Integral check:', np.sum(lineshape) * (new_ene_axis[1] - new_ene_axis[0]))
+
         self.lineshape = (new_ene_axis, lineshape)
 
 
     def compute_lineshape_fft(self, temp, sigma, zpl_broadening, energy_axis):
-        """
-        Compute the lineshape function A(E, T) via time-domain correlation and FFT.
+        r"""
+        Compute the lineshape function by FFT of the time-domain correlation.
 
-        This evaluates the time-domain correlation function:
+        The time-domain generating function is
 
-            G(t) = exp[ S(t) - S(0) + 2*C(t) - 2*C(0) ] * exp( -|t| * gamma_zpl / hbar )
+        .. math::
 
-        where:
-            - S(t)  = sum_k S_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * exp( i * omega_k * t )
-            - C(t)  = sum_k S_k * n_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * cos( omega_k * t )
-            - gamma_zpl = ZPL Lorentzian broadening in meV
+            G(t) = \exp \Big[ S(t) - S(0) + 2C(t) - 2C(0) \Big],
 
-        Args:
-            temp (float): temperature (K)
-            sigma (list of float): phonon broadening parameters in meV, e.g. [6.0, 1.5]
-            zpl_broadening (float): zero-phonon line broadening (HWHM) in meV
-            energy_axis (np.ndarray): target energy axis for FFT (in meV)
+        where
 
-        Sets:
-            self.lineshape: tuple (energy_axis_meV, A(E)), where A(E) is the lineshape.
+        .. math::
+
+            S(t) &= \sum_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) e^{i \omega_k t}, \\\\
+            C(t) &= \sum_k n_k S_k \exp\!\left(-\frac{\sigma_k^2t^2}{2\hbar^2}\right) \cos(\omega_k t).
+
+        The frequency-domain lineshape is then obtained as
+
+        .. math::
+
+            A(\hbar\omega) = \frac{1}{2\pi\hbar} \!\int dt \exp \left(i \omega t - \frac{|t| \gamma_\mathrm{ZPL}}{\hbar} \right) G(t).
+
+        Parameters
+        ----------
+        temp : float
+            Temperature in Kelvin.
+        sigma : list of float
+            Two-element list ``[sigma0, sigma1]`` for phonon broadening
+            parameters (in meV).
+        zpl_broadening : float
+            Zero-phonon line Lorentzian broadening (HWHM) in meV.
+        energy_axis : ndarray
+            Target energy axis in meV.
+
+        Notes
+        -----
+        The computed lineshape is stored in the attribute ``self.lineshape``,
+        a tuple ``(energy_axis, A(E))`` where ``energy_axis`` is in meV
+        and ``A(E)`` is the computed lineshape.
         """
 
         self.temp = temp

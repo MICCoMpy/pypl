@@ -9,7 +9,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
-project = 'pyPL'
+project = 'PyPL'
 author = 'Yu Jin'
 copyright = f'{datetime.now().year}, {author}'
 release = '0.1.0'
