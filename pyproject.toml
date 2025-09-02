@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypl"
+authors = [
+    {name = "Yu Jin", email = "jinyuchem@uchicago.edu"},
+    {name = "Victor Yu", email = "yuw@anl.gov"},
+    {name = "Marco Govoni", email = "mgovoni@unimore.it"},
+    {name = "Giulia Galli", email = "gagalli@uchicago.edu"},
+]
+description = "Python code to compute vibrationally resolved optical spectra"
+readme = "README.md"
+requires-python = ">=3.6, <4"
+license = "MIT"
+dependencies = [
+    "numpy",
+    "scipy",
+    "h5py",
+    "lxml",
+    "psutil",
+]
+version = "1.0"
+
+[project.scripts]
+pypl = "pypl"
+
+[project.urls]
+Homepage = "https://miccompy.github.io/pypl"
+Repository = "https://github.com/MICCoMpy/pypl"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pypl*"]

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual &mdash; pyPL 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Credits" href="acknowledge.html" />
+    <link rel="prev" title="Tutorials" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyPL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pypl.hrsolver">HR solver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.hrsolver.HRsolver"><code class="docutils literal notranslate"><span class="pre">HRsolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrsolver.HRsolver.compute_spectral_density"><code class="docutils literal notranslate"><span class="pre">HRsolver.compute_spectral_density()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrsolver.HRsolver.compute_lineshape_numerical_integration"><code class="docutils literal notranslate"><span class="pre">HRsolver.compute_lineshape_numerical_integration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrsolver.HRsolver.compute_lineshape_fft"><code class="docutils literal notranslate"><span class="pre">HRsolver.compute_lineshape_fft()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrsolver.HRsolver.compute_spectrum"><code class="docutils literal notranslate"><span class="pre">HRsolver.compute_spectrum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pypl.lineshape">Line shape</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.lineshape.lineshape"><code class="docutils literal notranslate"><span class="pre">lineshape</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.f_sigma"><code class="docutils literal notranslate"><span class="pre">lineshape.f_sigma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.generate_fxn"><code class="docutils literal notranslate"><span class="pre">lineshape.generate_fxn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.compute_lineshape_numerical_integration"><code class="docutils literal notranslate"><span class="pre">lineshape.compute_lineshape_numerical_integration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.lineshape.lineshape.compute_lineshape_fft"><code class="docutils literal notranslate"><span class="pre">lineshape.compute_lineshape_fft()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pypl.hrf">Huang-Rhys factors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypl.hrf.hrf"><code class="docutils literal notranslate"><span class="pre">hrf</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.set_masses"><code class="docutils literal notranslate"><span class="pre">hrf.set_masses()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.compute_hrf_forces"><code class="docutils literal notranslate"><span class="pre">hrf.compute_hrf_forces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.compute_hrf_dis"><code class="docutils literal notranslate"><span class="pre">hrf.compute_hrf_dis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.gaussian"><code class="docutils literal notranslate"><span class="pre">hrf.gaussian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.f_sigma"><code class="docutils literal notranslate"><span class="pre">hrf.f_sigma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pypl.hrf.hrf.compute_spectral_density"><code class="docutils literal notranslate"><span class="pre">hrf.compute_spectral_density()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledge.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyPL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Manual</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/manual.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="manual">
+<span id="id1"></span><h1>Manual<a class="headerlink" href="#manual" title="Link to this heading"></a></h1>
+<p>The complete <strong>pyPL</strong> reference is reported below.</p>
+<section id="module-pypl.hrsolver">
+<span id="hr-solver"></span><h2>HR solver<a class="headerlink" href="#module-pypl.hrsolver" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.hrsolver.</span></span><span class="sig-name descname"><span class="pre">HRsolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonopy_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forces_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_spectral_density">
+<span class="sig-name descname"><span class="pre">compute_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectral_density_energy_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.000e+00,</span> <span class="pre">1.000e-01,</span> <span class="pre">2.000e-01,</span> <span class="pre">...,</span> <span class="pre">1.998e+02,</span> <span class="pre">1.999e+02,</span> <span class="pre">2.000e+02])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_spectral_density" title="Link to this definition"></a></dt>
+<dd><p>Compute the phonon spectral density.</p>
+<dl class="simple">
+<dt>This function evaluates:</dt><dd><p>S(hbar * omega) = sum_k [ S_k * G(hbar * omega, hbar * omega_k, sigma_k) ]</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spectral_density_energy_axis</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – Energy axis (in meV) over which to evaluate the spectral density.
+Defaults to np.linspace(0, 200, 2001), i.e., 0 to 200 meV in 0.1 meV steps.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth parameters [sigma_min, sigma_max] for frequency-dependent broadening (in meV).
+Defaults to [6, 1.5]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis used for the spectral density (in meV).</p></li>
+<li><p><strong>spectral_density</strong> (<em>ndarray</em>) – Computed spectral density at each energy point (in 1 / meV).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_lineshape_numerical_integration">
+<span class="sig-name descname"><span class="pre">compute_lineshape_numerical_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">20000]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-150,</span> <span class="pre">550]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">701</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_lineshape_numerical_integration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_lineshape_numerical_integration" title="Link to this definition"></a></dt>
+<dd><p>Compute the temperature-dependent line shape function A(hbar * omega, T).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4 K.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</p></li>
+<li><p><strong>time_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Time domain range [start, end] in femtoseconds. Default is [0, 20000] fs.</p></li>
+<li><p><strong>time_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of time points in the time axis. Default is 200001.</p></li>
+<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Energy range [start, end] in meV for computing the lineshape. Default is [-150, 550] meV.</p></li>
+<li><p><strong>lineshape_energy_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of points in the energy axis. Default is 701.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_lineshape_fft">
+<span class="sig-name descname"><span class="pre">compute_lineshape_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[6,</span> <span class="pre">1.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-1000,</span> <span class="pre">1000]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineshape_energy_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_lineshape_fft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_lineshape_fft" title="Link to this definition"></a></dt>
+<dd><p>Compute the temperature-dependent line shape function A(hbar * omega, T).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature in Kelvin. Default is 4 K.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Linewidth interpolation values [sigma_min, sigma_max] for Gaussian broadening (in meV). Default is [6, 1.5]</p></li>
+<li><p><strong>zpl_broadening</strong> (<em>float</em><em>, </em><em>optional</em>) – Additional Lorentzian broadening for the zero-phonon line (in meV). Default is 0.3 meV.</p></li>
+<li><p><strong>lineshape_energy_range</strong> (<em>list</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Energy range [start, end] in meV for computing the lineshape. Default is [-1000, 1000] meV.</p></li>
+<li><p><strong>lineshape_energy_resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of points in the energy axis. Default is 2001.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result is stored in self.lineshape as a tuple (energy_axis, A(omega, T)).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrsolver.HRsolver.compute_spectrum">
+<span class="sig-name descname"><span class="pre">compute_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectrum_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ezpl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrsolver.html#HRsolver.compute_spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrsolver.HRsolver.compute_spectrum" title="Link to this definition"></a></dt>
+<dd><p>Compute the normalized photoluminescence (PL) or absorption spectrum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spectrum_type</strong> (<em>str</em>) – Type of spectrum to compute. Options:
+- “PL” : photoluminescence spectrum
+- “Abs”: absorption spectrum</p></li>
+<li><p><strong>ezpl</strong> (<em>float</em>) – Zero-phonon line (ZPL) energy in meV.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>energy_axis</strong> (<em>ndarray</em>) – Energy axis (in meV) of the computed spectrum.</p></li>
+<li><p><strong>spectrum</strong> (<em>ndarray</em>) – Normalized spectral intensity over the energy axis.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pypl.lineshape">
+<span id="line-shape"></span><h2>Line shape<a class="headerlink" href="#module-pypl.lineshape" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypl.lineshape.lineshape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.lineshape.</span></span><span class="sig-name descname"><span class="pre">lineshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hrf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.lineshape.lineshape.f_sigma">
+<span class="sig-name descname"><span class="pre">f_sigma</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.f_sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.f_sigma" title="Link to this definition"></a></dt>
+<dd><p>Calculate the broadening parameter <span class="math notranslate nohighlight">\(\sigma\)</span> for all phonons.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.lineshape.lineshape.generate_fxn">
+<span class="sig-name descname"><span class="pre">generate_fxn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.generate_fxn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.generate_fxn" title="Link to this definition"></a></dt>
+<dd><p>Compute the generating function <span class="math notranslate nohighlight">\(G(t, T)\)</span>.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>(tuple): tuple containing:</dt><dd><p>real_gfxn (np.array): real part of <span class="math notranslate nohighlight">\(G(t, T)\)</span>.
+imag_gfxn (np.array): imag part of <span class="math notranslate nohighlight">\(G(t, T)\)</span>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.lineshape.lineshape.compute_lineshape_numerical_integration">
+<span class="sig-name descname"><span class="pre">compute_lineshape_numerical_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ene_axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.compute_lineshape_numerical_integration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.compute_lineshape_numerical_integration" title="Link to this definition"></a></dt>
+<dd><p>Compute the lineshape function <span class="math notranslate nohighlight">\(A(\hbar\omega, T)\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>temp (float): temperature (K).
+sigma (list&lt;float&gt;): broadening parameter for Huang-Rhys factors (meV).
+lamba (float): broadening parameter for the zero-phonon line (meV).
+time_axis (np.array): time axis (fs).
+ene_axis (np.array): energy axis (meV).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.lineshape.lineshape.compute_lineshape_fft">
+<span class="sig-name descname"><span class="pre">compute_lineshape_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zpl_broadening</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/lineshape.html#lineshape.compute_lineshape_fft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.lineshape.lineshape.compute_lineshape_fft" title="Link to this definition"></a></dt>
+<dd><p>Compute the lineshape function A(E, T) via time-domain correlation and FFT.</p>
+<p>This evaluates the time-domain correlation function:</p>
+<blockquote>
+<div><p>G(t) = exp[ S(t) - S(0) + 2*C(t) - 2*C(0) ] * exp( -<a href="#id2"><span class="problematic" id="id3">|t|</span></a> * gamma_zpl / hbar )</p>
+</div></blockquote>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p>S(t)  = sum_k S_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * exp( i * omega_k * t )</p></li>
+<li><p>C(t)  = sum_k S_k * n_k * exp( - (sigma_k/hbar)^2 * t^2 / 2 ) * cos( omega_k * t )</p></li>
+<li><p>gamma_zpl = ZPL Lorentzian broadening in meV</p></li>
+</ul>
+</dd>
+<dt>Args:</dt><dd><p>temp (float): temperature (K)
+sigma (list of float): phonon broadening parameters in meV, e.g. [6.0, 1.5]
+zpl_broadening (float): zero-phonon line broadening (HWHM) in meV
+energy_axis (np.ndarray): target energy axis for FFT (in meV)</p>
+</dd>
+<dt>Sets:</dt><dd><p>self.lineshape: tuple (energy_axis_meV, A(E)), where A(E) is the lineshape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pypl.hrf">
+<span id="huang-rhys-factors"></span><h2>Huang-Rhys factors<a class="headerlink" href="#module-pypl.hrf" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pypl.hrf.hrf">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pypl.hrf.</span></span><span class="sig-name descname"><span class="pre">hrf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atomic_symbols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to compute Huang-Rhys factors and spectral density from phonon
+frequencies, eigenmodes, and either forces or displacements. All inputs,
+except atomic mass, should be in the SI units.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.set_masses">
+<span class="sig-name descname"><span class="pre">set_masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.set_masses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.set_masses" title="Link to this definition"></a></dt>
+<dd><p>Set atomic masses in kg for all atoms in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mass_list</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping element symbols to atomic masses in unified atomic
+mass units (u). If not provided, IUPAC-recommended values are used.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.compute_hrf_forces">
+<span class="sig-name descname"><span class="pre">compute_hrf_forces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forces</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_hrf_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_hrf_forces" title="Link to this definition"></a></dt>
+<dd><p>Compute Huang-Rhys factors using forces.</p>
+<p><span class="math notranslate nohighlight">\(S_k = \frac{\omega_k \Delta Q_k^2}{2\hbar}\)</span></p>
+<p><span class="math notranslate nohighlight">\(\Delta Q_k = \frac{1}{\omega_k^2} \sum_{\alpha=1}^N \sum_{i=x,y,z} \frac{F_{\alpha i}}{\sqrt{M_{\alpha}}} e_{k, \alpha i}\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forces</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Force vector on each atom in (J / meter).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.compute_hrf_dis">
+<span class="sig-name descname"><span class="pre">compute_hrf_dis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gs_coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_hrf_dis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_hrf_dis" title="Link to this definition"></a></dt>
+<dd><p>Compute Huang-Rhys factors using atomic displacement.</p>
+<p><span class="math notranslate nohighlight">\(S_k = \frac{\omega_k \Delta Q_k^2}{2\hbar}\)</span></p>
+<p><span class="math notranslate nohighlight">\(\Delta Q_k = \sum_{\alpha=1}^N \sum_{i=x,y,z} \sqrt{M_{\alpha}} \Delta R_{\alpha i} e_{k, \alpha i}\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gs_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Ground state atomic coordinates (in meter).</p></li>
+<li><p><strong>es_coord</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>3</em><em>)</em>) – Excited state atomic coordinates (in meter).</p></li>
+<li><p><strong>cell_parameters</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>3</em><em>, </em><em>3</em><em>)</em>) – Cell parameters (lattice constants) (in meter)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.gaussian">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.gaussian" title="Link to this definition"></a></dt>
+<dd><p>Compute the value of a Gaussian function.</p>
+<p><span class="math notranslate nohighlight">\(G(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – Evaluation point.</p></li>
+<li><p><strong>mu</strong> (<em>float</em>) – Mean of the Gaussian.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Standard deviation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Value of the Gaussian at <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.f_sigma">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">f_sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.f_sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.f_sigma" title="Link to this definition"></a></dt>
+<dd><p>Compute a frequency-dependent linewidth function sigma(w_k) by linear interpolation.</p>
+<p>The linewidth is interpolated between two user-defined values:</p>
+<blockquote>
+<div><p>sigma(w_k) = sigma_0 + (sigma_1 - sigma_0) / (w_max - w_min) * (w_k - w_min)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>freqs</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>M</em><em>,</em><em>)</em>) – Phonon frequencies.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> or </em><em>tuple</em><em> of </em><em>float</em>) – Two linewidth values [sigma_0, sigma_1] in meV, applied at the minimum and maximum frequency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>collect_sigma</strong> – Interpolated linewidths sigma(w_k) for each mode (in meV).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (M,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pypl.hrf.hrf.compute_spectral_density">
+<span class="sig-name descname"><span class="pre">compute_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pypl/hrf.html#hrf.compute_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pypl.hrf.hrf.compute_spectral_density" title="Link to this definition"></a></dt>
+<dd><p>Compute the phonon spectral density using Gaussian broadening.</p>
+<p>The formula used is:</p>
+<blockquote>
+<div><p>S(hbar * w) = sum_k [ S_k * G(hbar * w, hbar * w_k, sigma(w_k)) ]</p>
+</div></blockquote>
+<p>where G is a normalized Gaussian centered at each mode energy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy_axis</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>N</em><em>,</em><em>)</em>) – Energy axis (in meV) over which to evaluate the spectral density.</p></li>
+<li><p><strong>sigma</strong> (<em>list</em><em> or </em><em>tuple</em><em> of </em><em>float</em>) – Linewidth interpolation values [sigma_0, sigma_1] in meV used in Gaussian broadening.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>spectral_density</strong> – Spectral density evaluated over the given energy axis (in 1 / meV).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (N,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="acknowledge.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yu Jin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
