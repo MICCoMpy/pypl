@@ -9,7 +9,7 @@ The complete **PyPL** reference is reported below.
 HR solver
 ---------
 
-.. automodule:: pypl.hrsolver
+.. automodule:: pypl.hr_solver
     :members:
     :undoc-members:
     :show-inheritance:
@@ -26,6 +26,14 @@ Huang-Rhys factors
 ------------------
 
 .. automodule:: pypl.hrf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+1D configurational coordinate solver
+------------------------------------
+
+.. automodule:: pypl.config_coord_1d_solver
     :members:
     :undoc-members:
     :show-inheritance:

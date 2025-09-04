@@ -24,7 +24,7 @@ To install **PyPL** you need to execute:
 
 .. code:: bash
 
-    $ git clone https://github.com/MICCoMPy/pypl.git
+    $ git clone https://github.com/jinyuchem/pypl.git
     $ cd pypl
     $ pip install .
 

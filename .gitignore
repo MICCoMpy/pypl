@@ -3,13 +3,15 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Ignore Sphinx build directory
+doc/_build/
+
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
 build/
-docs/_build/
 develop-eggs/
 dist/
 downloads/

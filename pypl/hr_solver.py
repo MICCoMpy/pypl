@@ -5,7 +5,7 @@ from .hrf import hrf
 from .lineshape import lineshape
 
 
-class HRsolver:
+class hr_solver:
     """
     High-level solver for computing Huang–Rhys factors (HRFs), spectral density,
     and optical lineshapes from phonon and structural data.
