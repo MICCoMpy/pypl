@@ -10,8 +10,9 @@ class lineshape:
 
     Parameters
     ----------
-    hrf : hrf.hrf
-        Instance of the `hrf` class containing phonon frequencies and Huang-Rhys factors.
+    # hrf : hrf.hrf
+    #     Instance of the `hrf` class containing phonon frequencies and Huang-Rhys factors.
+    hrf : dictionary. hrf['freqs'] for phonon frequency. hrf['hr_factors'] for partial Huang-Rhys factors 
     """
 
     def __init__(self, hrf):
@@ -38,8 +39,8 @@ class lineshape:
 
         self.all_sigma = (
             self.sigma[0] - (self.sigma[0] - self.sigma[1])
-            / (max(self.hrf.freqs) - min(self.hrf.freqs))
-            * (self.hrf.freqs[:] - min(self.hrf.freqs))
+            / (max(self.hrf['freqs']) - min(self.hrf['freqs']))
+            * (self.hrf['freqs'] - min(self.hrf['freqs']))
         )
 
 
@@ -83,23 +84,23 @@ class lineshape:
         self.time_axis = time_axis * 1e-15
         self.ene_axis = ene_axis * constants.eV * 1e-3
         self.f_sigma()
-        self.ph_occ = 1 / (np.exp((self.hrf.freqs * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
+        self.ph_occ = 1 / (np.exp((self.hrf['freqs'] * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
 
         ReS_t = (np.exp(-self.time_axis[None, :]**2 * self.all_sigma[:, None]**2 / 2 /constants.hbar**2)
-                 * np.cos(self.hrf.freqs[:, None] * self.time_axis[None, :]))
+                 * np.cos(self.hrf['freqs'][:, None] * self.time_axis[None, :]))
         ImS_t = (np.exp(-self.time_axis[None, :]**2 * self.all_sigma[:, None]**2 / 2 / constants.hbar**2) 
-                 * (-1) * np.sin(self.hrf.freqs[:, None] * self.time_axis[None, :]))
-        ReS_t = np.dot(self.hrf.hrf, ReS_t)
-        ImS_t = np.dot(self.hrf.hrf, ImS_t)
+                 * (-1) * np.sin(self.hrf['freqs'][:, None] * self.time_axis[None, :]))
+        ReS_t = np.dot(self.hrf['hr_factors'], ReS_t)
+        ImS_t = np.dot(self.hrf['hr_factors'], ImS_t)
 
-        ReS_0 = np.sum(self.hrf.hrf)
+        ReS_0 = np.sum(self.hrf['hr_factors'])
 
         if self.temp > 0:
             ReC_t = (np.exp(-self.time_axis[None, :]**2 * self.all_sigma[:, None]**2 / 2 / constants.hbar**2)
-                      * np.cos(self.hrf.freqs[:, None] * self.time_axis[None, :]) * self.ph_occ[:, None])
-            ReC_t = np.dot(self.hrf.hrf, ReC_t)
+                      * np.cos(self.hrf['freqs'][:, None] * self.time_axis[None, :]) * self.ph_occ[:, None])
+            ReC_t = np.dot(self.hrf['hr_factors'], ReC_t)
 
-            ReC_0 = np.sum(self.hrf.hrf * self.ph_occ)
+            ReC_0 = np.sum(self.hrf['hr_factors'] * self.ph_occ)
 
             gr = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.cos(ImS_t)
             gi = np.exp(ReS_t - ReS_0 + 2 * ReC_t - 2 * ReC_0) * np.sin(ImS_t)
@@ -187,21 +188,21 @@ class lineshape:
         print('d_t (s):', d_t)
 
         self.f_sigma()
-        self.ph_occ = 1 / (np.exp((self.hrf.freqs * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
+        self.ph_occ = 1 / (np.exp((self.hrf['freqs'] * constants.hbar) / (constants.Boltzmann * self.temp)) - 1)
 
         # Compute S(t)
         gauss_t = np.exp(-0.5 * (self.all_sigma[:, None]**2 / constants.hbar**2) * (time_axis[None, :]**2))
-        phase_t = np.exp(1j * self.hrf.freqs[:, None] * time_axis[None, :])
+        phase_t = np.exp(1j * self.hrf['freqs'][:, None] * time_axis[None, :])
         S_t_modes = gauss_t * phase_t
-        S_t = np.dot(self.hrf.hrf, S_t_modes)
-        S_0 = np.sum(self.hrf.hrf)
+        S_t = np.dot(self.hrf['hr_factors'], S_t_modes)
+        S_0 = np.sum(self.hrf['hr_factors'])
 
         # Compute C(t) if T > 0
         if temp > 0.0:
-            cos_t = np.cos(self.hrf.freqs[:, None] * time_axis[None, :])
+            cos_t = np.cos(self.hrf['freqs'][:, None] * time_axis[None, :])
             C_t_modes = gauss_t * cos_t * self.ph_occ[:, None]
-            C_t = np.dot(self.hrf.hrf, C_t_modes)
-            C_0 = np.sum(self.hrf.hrf * self.ph_occ)
+            C_t = np.dot(self.hrf['hr_factors'], C_t_modes)
+            C_0 = np.sum(self.hrf['hr_factors'] * self.ph_occ)
             exponent = (S_t - S_0) + 2.0 * (C_t - C_0)
         else:
             exponent = (S_t - S_0)

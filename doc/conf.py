@@ -20,6 +20,7 @@ extensions = [
     'sphinx.ext.napoleon',      # Supports NumPy and Google docstrings
     'sphinx.ext.viewcode',      # Adds links to source code
     'sphinx.ext.mathjax',       # Renders LaTeX math
+    'nbsphinx',
 ]
 
 templates_path = ['_templates']

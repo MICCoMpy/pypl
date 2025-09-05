@@ -1,13 +1,13 @@
 import numpy as np
 from scipy import constants
 from .utils import *
-from .hrf import hrf
+from .hr_factors import hr_factors
 from .lineshape import lineshape
 
 
 class hr_solver:
     """
-    High-level solver for computing Huang–Rhys factors (HRFs), spectral density,
+    High-level solver for computing Huang-Rhys factors (HRFs), spectral density,
     and optical lineshapes from phonon and structural data.
 
     Depending on the inputs, HRFs are computed using either forces or displacements:
@@ -34,94 +34,148 @@ class hr_solver:
         If the input combination is invalid (e.g. mixing force and displacement inputs).
     """
 
-    def __init__(self, phonopy_file, forces_file=None, gs_file=None, es_file=None, mass_list=None):
-
-        freqs, modes = parse_phonopy_h5(phonopy_file)
-
-        self.freqs = freqs * 1e12 * 2 * np.pi
-        self.modes = modes
-
-        if forces_file is not None and gs_file is None and es_file is None:
-            print("Computing Huang-Rhys factors using atomic forces.")
-
-            forces = parse_forces_qexml(forces_file)
-            forces *= (constants.eV / 1e-10)
-            atomic_symbols, _, _ = parse_atoms_qexml(forces_file)
-
-            self.hrf = hrf(self.freqs, self.modes, atomic_symbols)
-            self.hrf.set_masses(mass_list)
-            self.hrf.compute_hrf_forces(forces)
-
-        elif forces_file is None and gs_file is not None and es_file is not None:
-            print("Computing Huang-Rhys factors using atomic displacements.")
-
-            atomic_symbols, gs_coord, cell_parameters = parse_atoms_qexml(gs_file)
-            atomic_symbols_2, es_coord, cell_parameters_2 = parse_atoms_qexml(es_file)
-
-            assert atomic_symbols == atomic_symbols_2, (
-                "Mismatch in atomic symbols between ground-state and excited-state structures. "
-                "Please ensure both structures have the same atom types and order."
-            )
-
-            assert np.max(np.abs(cell_parameters - cell_parameters_2)) < 1e-12, (
-                "Mismatch in cell parameters between ground-state and excited-state structures. "
-                "Ensure both structures are in the same unit cell."
-            )
-
-            gs_coord *= 1e-10
-            es_coord *= 1e-10
-            cell_parameters *= 1e-10
-
-            self.hrf = hrf(self.freqs, self.modes, atomic_symbols)
-            self.hrf.set_masses(mass_list)
-            self.hrf.compute_hrf_dis(gs_coord, es_coord, cell_parameters)
-
-        else:
-            raise ValueError(
-                "Invalid input combination:\n"
-                "- To use forces, provide `forces_file` only.\n"
-                "- To use displacements, provide both `gs_file` and `es_file`.\n"
-                "- Do not mix force and displacement inputs."
-            )
-
-        self.tot_hrf = sum(self.hrf.hrf)
+    def __init__(self):
+        return
 
 
-    def compute_spectral_density(self, spectral_density_energy_axis=None, sigma=[6, 1.5]):
+    def compute_hrf_forces(self, phonon_freqs_in, phonon_modes_in, atomic_symbols, forces_in, mass_list=None):
+
+        print("Computing Huang-Rhys factors using atomic forces.")
+        print()
+
+        freqs = phonon_freqs_in * 1e12 * 2 * np.pi
+        modes = phonon_modes_in.copy()
+
+        forces = forces_in * (constants.eV / 1e-10)
+
+        hrf = hr_factors(freqs, modes, atomic_symbols, mass_list)
+        hrf.compute_hrf_forces(forces)
+
+        print("Total Huang-Rhys factor is % .12e" % (np.sum(hrf.hrf)))
+        print()
+
+        return {'freqs': freqs, 'hr_factors': hrf.hrf}
+
+
+    def compute_hrf_dis(self, phonon_freqs_in, phonon_modes_in, atomic_symbols, gs_coord_in, es_coord_in, cell_parameters_in, mass_list=None):
+
+        print("Computing Huang-Rhys factors using atomic displacements.")
+
+        freqs = phonon_freqs_in * 1e12 * 2 * np.pi
+        modes = phonon_modes_in.copy()
+
+        gs_coord = gs_coord_in * 1e-10
+        es_coord = es_coord_in * 1e-10
+        cell_parameters = cell_parameters_in * 1e-10
+
+        hrf = hr_factors(freqs, modes, atomic_symbols, mass_list)
+        hrf.compute_hrf_dis(gs_coord, es_coord, cell_parameters)
+
+        print("Total Huang-Rhys factor is % .12e" % (np.sum(hrf.hrf)))
+
+        return {'freqs': freqs, 'hr_factors': hrf.hrf}
+
+
+
+    @staticmethod
+    def gaussian(x, mu, sigma):
         r"""
-        Compute the phonon spectral density.
+        Compute the value of a Gaussian function.
+
+        .. math::
+
+            G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
+
+        Parameters
+        ----------
+        x : float
+            Evaluation point.
+        mu : float
+            Mean of the Gaussian.
+        sigma : float
+            Standard deviation.
+
+        Returns
+        -------
+        float
+            Value of the Gaussian at `x`.
+        """
+
+        prefactor = 1 / np.sqrt(2.0 * np.pi * sigma**2)
+        exponent = np.exp(- (x - mu)**2 / (2 * sigma**2))
+        f = prefactor * exponent
+        return f
+
+
+    @staticmethod
+    def f_sigma(freqs, sigma):
+        r"""
+        Compute a frequency-dependent linewidth function by linear interpolation.
+
+        .. math::
+
+            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))
+
+        Parameters
+        ----------
+        freqs : ndarray of shape (M,)
+            Phonon frequencies in rad/s.
+        sigma : list of float
+            Two-element list ``[sigma_0, sigma_1]`` in meV, giving the linewidth
+            at the minimum and maximum frequency.
+
+        Returns
+        -------
+        collect_sigma : ndarray of shape (M,)
+            Interpolated linewidths :math:`\sigma(\omega_k)` in meV.
+        """
+
+        collect_sigma = sigma[0] - (sigma[0] - sigma[1]) / (max(freqs) - min(freqs)) * (freqs - min(freqs))
+        return collect_sigma
+
+
+    def compute_spectral_density(self, hrf_dict, energy_axis=None, sigma=[6.0, 1.5]):
+        r"""
+        Compute the phonon spectral density with Gaussian broadening.
 
         .. math::
 
             S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))
 
-        where :math:`G` is a normalized Gaussian centered at each mode.
+        where :math:`G` is a normalized Gaussian.
 
         Parameters
         ----------
-        spectral_density_energy_axis : ndarray, optional
-            Energy axis (in meV). Defaults to ``np.linspace(0, 200, 2001)``
-            (0–200 meV in 0.1 meV steps).
-        sigma : list of float, optional
-            Two-element list ``[sigma_min, sigma_max]`` in meV for linewidth
-            interpolation. Default is [6, 1.5].
+        energy_axis : ndarray of shape (N,)
+            Energy axis in meV over which to evaluate the spectral density.
+        sigma : list of float
+            Two-element list ``[sigma_0, sigma_1]`` in meV, used for linewidth interpolation.
 
         Returns
         -------
-        energy_axis : ndarray
-            Energy axis in meV.
-        spectral_density : ndarray
-            Computed spectral density (in 1/meV).
+        spectral_density : ndarray of shape (N,)
+            Spectral density evaluated on the given energy axis (in 1/meV).
         """
+        if energy_axis is None:
+            energy_axis = np.linspace(0, 200, 2001)
 
-        if spectral_density_energy_axis is None:
-            spectral_density_energy_axis = np.linspace(0, 200, 2001)
+        nom = hrf_dict['freqs'].shape[0]
 
-        spectral_density = self.hrf.compute_spectral_density(spectral_density_energy_axis, sigma)
-        return spectral_density_energy_axis, spectral_density
+        gfxns = np.zeros((nom, energy_axis.shape[0]))
+
+        collect_sigmas = self.f_sigma(hrf_dict['freqs'], sigma)
+
+        gfxns[:, :] = self.gaussian(
+            energy_axis[None, :], 
+            hrf_dict['freqs'][:, None] * constants.hbar / constants.eV * 1000, 
+            collect_sigmas[:, None]
+            )
+
+        spectral_density = np.dot(hrf_dict['hr_factors'], gfxns)
+        return energy_axis, spectral_density
 
 
-    def compute_lineshape_numerical_integration(self, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
+    def compute_lineshape_numerical_integration(self, hrf_dict, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
                                                 time_range=[0, 20000], time_resolution=200001,
                                                 lineshape_energy_range=[-150, 550], lineshape_energy_resolution=701):
         r"""
@@ -162,13 +216,14 @@ class hr_solver:
         time_axis = np.linspace(time_range[0], time_range[1], time_resolution)
         lineshape_energy_axis = np.linspace(lineshape_energy_range[0], lineshape_energy_range[1], lineshape_energy_resolution)
 
-        self._lineshape = lineshape(self.hrf)
-        self._lineshape.compute_lineshape_numerical_integration(temp=temp, sigma=sigma, zpl_broadening=zpl_broadening,
+        _lineshape = lineshape(hrf_dict)
+        _lineshape.compute_lineshape_numerical_integration(temp=temp, sigma=sigma, zpl_broadening=zpl_broadening,
                                                                 time_axis=time_axis, ene_axis=lineshape_energy_axis)
-        self.lineshape = self._lineshape.lineshape
+        self.lineshape = _lineshape.lineshape
+        return self.lineshape
 
 
-    def compute_lineshape_fft(self, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
+    def compute_lineshape_fft(self, hrf_dict, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
                               lineshape_energy_range=[-1000, 1000], lineshape_energy_resolution=2001):
         r"""
         Compute the temperature-dependent optical lineshape
@@ -212,12 +267,13 @@ class hr_solver:
 
         energy_axis = np.linspace(lineshape_energy_range[0], lineshape_energy_range[1], lineshape_energy_resolution)
 
-        self._lineshape = lineshape(self.hrf)
-        self._lineshape.compute_lineshape_fft(temp=temp, sigma=sigma, zpl_broadening=zpl_broadening, energy_axis=energy_axis)
-        self.lineshape = self._lineshape.lineshape
+        _lineshape = lineshape(hrf_dict)
+        _lineshape.compute_lineshape_fft(temp=temp, sigma=sigma, zpl_broadening=zpl_broadening, energy_axis=energy_axis)
+        self.lineshape = _lineshape.lineshape
+        return self.lineshape
 
 
-    def compute_spectrum(self, spectrum_type, ezpl):
+    def compute_spectrum(self, ezpl=1.0, spectrum_type='PL', lineshape=None):
         """
         Compute the normalized photoluminescence (PL) or absorption spectrum.
 
@@ -238,15 +294,20 @@ class hr_solver:
             Normalized spectral intensity.
         """
 
+        if lineshape is None:
+            lineshape = self.lineshape
+
         # multiply the pre-coeffcient
         if spectrum_type == "PL":
-            energy_axis = ezpl - self._lineshape.lineshape[0]
-            spectrum = self._lineshape.lineshape[1] * energy_axis**3
+            energy_axis_out = ezpl - lineshape[0]
+            spectrum = lineshape[1] * energy_axis_out**3
         elif spectrum_type == "Abs":
-            energy_axis = ezpl + self._lineshape.lineshape[0]
-            spectrum = self._lineshape.lineshape[1] * energy_axis
+            energy_axis_out = ezpl + lineshape[0]
+            spectrum = lineshape[1] * energy_axis_out
+        else:
+            raise ValueError("Invalid spectrum type")
 
         # normalization
-        spectrum = spectrum / sum(spectrum) / abs(energy_axis[1] - energy_axis[0]) * 1000
+        spectrum = spectrum / sum(spectrum) / abs(energy_axis_out[1] - energy_axis_out[0]) * 1000
 
-        return energy_axis, spectrum
+        return energy_axis_out, spectrum

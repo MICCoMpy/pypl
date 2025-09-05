@@ -249,7 +249,7 @@ class config_coord_1d_solver:
         return self.eneaxis, self.fc_lineshape
 
 
-    def compute_spectrum(self, eneaxis=None, linshape=None, tdm=1.0, zpl=0.0, spectrum_type='pl'):
+    def compute_spectrum(self, eneaxis=None, linshape=None, tdm=1.0, zpl=0.0, spectrum_type='PL'):
         r"""
         Compute the optical spectrum from the FC lineshape.
 
@@ -275,9 +275,9 @@ class config_coord_1d_solver:
             Transition dipole moment. Default is 1.0.
         zpl : float, optional
             Zero-phonon line (ZPL) energy. Default is 0.0 meV.
-        spectrum_type : {'pl', 'abs'}, optional
-            Type of spectrum to compute: 'pl' (photoluminescence) or
-            'abs' (absorption). Default is 'pl'.
+        spectrum_type : {'PL', 'Abs'}, optional
+            Type of spectrum to compute: 'PL' (photoluminescence) or
+            'Abs' (absorption). Default is 'PL'.
 
         Returns
         -------
@@ -293,10 +293,10 @@ class config_coord_1d_solver:
         if linshape is None:
             linshape = self.fc_lineshape
 
-        if spectrum_type == 'pl':
+        if spectrum_type == 'PL':
             eneaxis_out = zpl - eneaxis
             spectrum = linshape * tdm**2 * (zpl - eneaxis)**3
-        elif spectrum_type == 'abs':
+        elif spectrum_type == 'Abs':
             eneaxis_out = zpl + eneaxis
             spectrum = linshape * tdm**2 * (zpl + eneaxis)
         else:
@@ -356,7 +356,7 @@ if __name__ == "__main__":
     ccd_pl.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
                         temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
 
-    pl_spectrum = ccd_pl.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='pl')
+    pl_spectrum = ccd_pl.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='PL')
 
     # absorption
     ccd_abs = config_coord_1d_solver(freq_gs, freq_es, delta_q)
@@ -365,7 +365,7 @@ if __name__ == "__main__":
     ccd_abs.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
                          temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
 
-    abs_spectrum = ccd_abs.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='abs')
+    abs_spectrum = ccd_abs.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='Abs')
 
     ########
     # plot #
@@ -391,6 +391,6 @@ if __name__ == "__main__":
     ax.xaxis.set_ticks_position("both")
     ax.yaxis.set_ticks_position("both")
     ax.set_xlabel("$\hbar\omega$ (eV)")
-    ax.set_ylabel("PL (arb. unit.)")
+    ax.set_ylabel("PL/Abs (arb. unit.)")
 
     plt.show()

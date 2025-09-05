@@ -62,6 +62,8 @@ def parse_forces_qexml(fileName):
 
     Returns
     -------
+    atomic_symbols : list of str
+        Atomic symbols for all atoms in the structure.
     forces : ndarray of shape (N, 3)
         Forces on atoms in eV/Å.
     
@@ -74,6 +76,13 @@ def parse_forces_qexml(fileName):
     tree = ET.parse(fileName)
     root = tree.getroot()
 
+    atomic_structure = root.find("output/atomic_structure")
+
+    atomic_symbols = []
+    for atom in atomic_structure.find("atomic_positions").findall("atom"):
+        name = atom.attrib["name"]
+        atomic_symbols.append(name)
+
     forces_tag = root.find("output/forces")
     if forces_tag is None:
         raise ValueError("Could not find <forces> tag in <output>.")
@@ -81,7 +90,39 @@ def parse_forces_qexml(fileName):
     force_values = np.fromstring(forces_tag.text, sep=' ', dtype=np.float64)
     forces = force_values.reshape((-1, 3)) * 2.0 * ry2ev / bohr2ang
 
-    return forces
+    return atomic_symbols, forces
+
+
+def parse_total_energy_qexml(fileName):
+    """
+    Parse the final total energy from a Quantum ESPRESSO XML output file.
+
+    Parameters
+    ----------
+    fileName : str
+        Path to the QE XML file.
+
+    Returns
+    -------
+    total_energy : ndarray of shape (N, 3)
+        Total energy in eV.
+
+    Raises
+    ------
+    ValueError
+        If the `<total_energy/etot>` tag cannot be found in the XML file.
+    """
+
+    tree = ET.parse(fileName)
+    root = tree.getroot()
+
+    energy_tag = root.find("output/total_energy/etot")
+    if energy_tag is None:
+        raise ValueError("Could not find <total_energy/etot> tag in <output>.")
+
+    total_energy = float(energy_tag.text) * 2.0 * ry2ev
+
+    return total_energy
 
 
 def parse_phonopy_h5(fileName, real_tol=1e-10):

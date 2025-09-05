@@ -10,6 +10,4 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   tutorials/PyPL_100.ipynb
-   tutorials/PyPL_200.ipynb
-
+   tutorials/pypl_001.ipynb

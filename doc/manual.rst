@@ -6,16 +6,16 @@ Manual
 The complete **PyPL** reference is reported below.
 
 
-HR solver
----------
+Huang-Rhys solver
+-----------------
 
 .. automodule:: pypl.hr_solver
     :members:
     :undoc-members:
     :show-inheritance:
 
-Line shape
-----------
+Lineshape
+---------
 
 .. automodule:: pypl.lineshape
     :members:
@@ -25,7 +25,7 @@ Line shape
 Huang-Rhys factors
 ------------------
 
-.. automodule:: pypl.hrf
+.. automodule:: pypl.hr_factors
     :members:
     :undoc-members:
     :show-inheritance:

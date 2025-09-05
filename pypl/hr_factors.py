@@ -3,7 +3,7 @@ from scipy import constants
 import warnings
 
 
-class hrf:
+class hr_factors:
     """
     Compute Huang-Rhys factors and spectral density from phonon
     frequencies, eigenmodes, and either forces or displacements.
@@ -19,7 +19,7 @@ class hrf:
         Atomic chemical symbols.
     """
 
-    def __init__(self, freqs, modes, atomic_symbols):
+    def __init__(self, freqs, modes, atomic_symbols, mass_list=None):
 
         self.freqs = freqs
         self.modes = modes
@@ -33,6 +33,8 @@ class hrf:
             warnings.warn(f"{self.nom_imag_freq} imaginary mode(s) detected in the phonon spectrum. "
                         "Results involving these modes (e.g., HR factors) may be unreliable.",
                         UserWarning)
+
+        self.set_masses(mass_list=mass_list)
 
 
     def set_masses(self, mass_list=None):
@@ -115,6 +117,9 @@ class hrf:
         deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq:, :], mass_forces)
         deltaq = deltaq / self.freqs[self.nom_translational + self.nom_imag_freq:]**2
 
+        print("Total \Delta Q is % .12e amu^{0.5} \AA" % (
+            np.linalg.norm(deltaq) / constants.physical_constants['atomic mass constant'][0]**0.5 * 1e10))
+
         self.hrf = np.concatenate((np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
                                    deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq:] / 2 / constants.hbar))
 
@@ -163,99 +168,102 @@ class hrf:
         modes = np.reshape(self.modes, (self.nom, self.nom))
         deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq:, :], mass_dis)
 
+        print("Total \Delta Q is % .12e amu^{0.5} \AA" % (
+            np.linalg.norm(deltaq) / constants.physical_constants['atomic mass constant'][0]**0.5 * 1e10))
+
         self.hrf = np.concatenate((np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
                                    deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq:] / 2 / constants.hbar))
 
 
-    @staticmethod
-    def gaussian(x, mu, sigma):
-        r"""
-        Compute the value of a Gaussian function.
+    # @staticmethod
+    # def gaussian(x, mu, sigma):
+    #     r"""
+    #     Compute the value of a Gaussian function.
 
-        .. math::
+    #     .. math::
 
-            G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
+    #         G(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
 
-        Parameters
-        ----------
-        x : float
-            Evaluation point.
-        mu : float
-            Mean of the Gaussian.
-        sigma : float
-            Standard deviation.
+    #     Parameters
+    #     ----------
+    #     x : float
+    #         Evaluation point.
+    #     mu : float
+    #         Mean of the Gaussian.
+    #     sigma : float
+    #         Standard deviation.
 
-        Returns
-        -------
-        float
-            Value of the Gaussian at `x`.
-        """
+    #     Returns
+    #     -------
+    #     float
+    #         Value of the Gaussian at `x`.
+    #     """
 
-        prefactor = 1 / np.sqrt(2.0 * np.pi * sigma**2)
-        exponent = np.exp(- (x - mu)**2 / (2 * sigma**2))
-        f = prefactor * exponent
-        return f
-
-
-    @staticmethod
-    def f_sigma(freqs, sigma):
-        r"""
-        Compute a frequency-dependent linewidth function by linear interpolation.
-
-        .. math::
-
-            \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))
-
-        Parameters
-        ----------
-        freqs : ndarray of shape (M,)
-            Phonon frequencies in rad/s.
-        sigma : list of float
-            Two-element list ``[sigma_0, sigma_1]`` in meV, giving the linewidth
-            at the minimum and maximum frequency.
-
-        Returns
-        -------
-        collect_sigma : ndarray of shape (M,)
-            Interpolated linewidths :math:`\sigma(\omega_k)` in meV.
-        """
-
-        collect_sigma = sigma[0] - (sigma[0] - sigma[1]) / (max(freqs) - min(freqs)) * (freqs - min(freqs))
-        return collect_sigma
+    #     prefactor = 1 / np.sqrt(2.0 * np.pi * sigma**2)
+    #     exponent = np.exp(- (x - mu)**2 / (2 * sigma**2))
+    #     f = prefactor * exponent
+    #     return f
 
 
-    def compute_spectral_density(self, energy_axis, sigma):
-        r"""
-        Compute the phonon spectral density with Gaussian broadening.
+    # @staticmethod
+    # def f_sigma(freqs, sigma):
+    #     r"""
+    #     Compute a frequency-dependent linewidth function by linear interpolation.
 
-        .. math::
+    #     .. math::
 
-            S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))
+    #         \sigma(\omega_k) = \sigma_0 - \frac{\sigma_0 - \sigma_1}{\max(\omega_k) - \min(\omega_k)} (\omega_k - \min(\omega_k))
 
-        where :math:`G` is a normalized Gaussian.
+    #     Parameters
+    #     ----------
+    #     freqs : ndarray of shape (M,)
+    #         Phonon frequencies in rad/s.
+    #     sigma : list of float
+    #         Two-element list ``[sigma_0, sigma_1]`` in meV, giving the linewidth
+    #         at the minimum and maximum frequency.
 
-        Parameters
-        ----------
-        energy_axis : ndarray of shape (N,)
-            Energy axis in meV over which to evaluate the spectral density.
-        sigma : list of float
-            Two-element list ``[sigma_0, sigma_1]`` in meV, used for linewidth interpolation.
+    #     Returns
+    #     -------
+    #     collect_sigma : ndarray of shape (M,)
+    #         Interpolated linewidths :math:`\sigma(\omega_k)` in meV.
+    #     """
 
-        Returns
-        -------
-        spectral_density : ndarray of shape (N,)
-            Spectral density evaluated on the given energy axis (in 1/meV).
-        """
+    #     collect_sigma = sigma[0] - (sigma[0] - sigma[1]) / (max(freqs) - min(freqs)) * (freqs - min(freqs))
+    #     return collect_sigma
 
-        gfxns = np.zeros((self.nom, energy_axis.shape[0]))
 
-        collect_sigmas = self.f_sigma(self.freqs, sigma)
+    # def compute_spectral_density(self, energy_axis, sigma):
+    #     r"""
+    #     Compute the phonon spectral density with Gaussian broadening.
 
-        gfxns[:, :] = self.gaussian(
-            energy_axis[None, :], 
-            self.freqs[:, None] * constants.hbar / constants.eV * 1000, 
-            collect_sigmas[:, None]
-            )
+    #     .. math::
 
-        spectral_density = np.dot(self.hrf, gfxns)
-        return spectral_density
+    #         S(\hbar \omega) = \sum_k S_k G(\hbar \omega, \hbar \omega_k, \sigma(\omega_k))
+
+    #     where :math:`G` is a normalized Gaussian.
+
+    #     Parameters
+    #     ----------
+    #     energy_axis : ndarray of shape (N,)
+    #         Energy axis in meV over which to evaluate the spectral density.
+    #     sigma : list of float
+    #         Two-element list ``[sigma_0, sigma_1]`` in meV, used for linewidth interpolation.
+
+    #     Returns
+    #     -------
+    #     spectral_density : ndarray of shape (N,)
+    #         Spectral density evaluated on the given energy axis (in 1/meV).
+    #     """
+
+    #     gfxns = np.zeros((self.nom, energy_axis.shape[0]))
+
+    #     collect_sigmas = self.f_sigma(self.freqs, sigma)
+
+    #     gfxns[:, :] = self.gaussian(
+    #         energy_axis[None, :], 
+    #         self.freqs[:, None] * constants.hbar / constants.eV * 1000, 
+    #         collect_sigmas[:, None]
+    #         )
+
+    #     spectral_density = np.dot(self.hrf, gfxns)
+    #     return spectral_density
