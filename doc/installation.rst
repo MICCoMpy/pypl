@@ -26,7 +26,7 @@ To install **PyPL** you need to execute:
 
     $ git clone https://github.com/jinyuchem/pypl.git
     $ cd pypl
-    $ pip install .
+    $ pip install -e .
 
 If using **pip** is not possible, one can manually install the above dependencies, and then add the directory of **PyPL** to the ``PYTHONPATH`` environment variable by, e.g.,
 

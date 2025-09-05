@@ -11,3 +11,5 @@ Contents:
    :maxdepth: 1
 
    tutorials/pypl_001.ipynb
+   tutorials/pypl_002.ipynb
+

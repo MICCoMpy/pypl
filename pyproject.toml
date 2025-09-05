@@ -17,18 +17,18 @@ license = "MIT"
 dependencies = [
     "numpy",
     "scipy",
+    "matplotlib",
     "h5py",
-    "lxml",
-    "psutil",
+    "pyyaml",
 ]
-version = "1.0"
+version = "0.0"
 
 [project.scripts]
-pypl = "pypl"
+pypl = "pypl.cli:main"
 
 [project.urls]
-Homepage = "https://miccompy.github.io/pypl"
-Repository = "https://github.com/MICCoMpy/pypl"
+Homepage = "https://github.com/jinyuchem/pypl"
+Repository = "https://github.com/jinyuchem/pypl"
 
 [tool.setuptools.packages.find]
 where = ["."]
