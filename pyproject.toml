@@ -20,6 +20,8 @@ dependencies = [
     "matplotlib",
     "h5py",
     "pyyaml",
+    "sphinx",
+    "sphinx_rtd_theme",
 ]
 version = "0.0"
 

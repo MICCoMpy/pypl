@@ -104,7 +104,7 @@ def parse_total_energy_qexml(fileName):
 
     Returns
     -------
-    total_energy : ndarray of shape (N, 3)
+    total_energy : float
         Total energy in eV.
 
     Raises

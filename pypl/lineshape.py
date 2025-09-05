@@ -10,9 +10,8 @@ class lineshape:
 
     Parameters
     ----------
-    # hrf : hrf.hrf
-    #     Instance of the `hrf` class containing phonon frequencies and Huang-Rhys factors.
-    hrf : dictionary. hrf['freqs'] for phonon frequency. hrf['hr_factors'] for partial Huang-Rhys factors 
+    hrf : dictionary
+        hrf['freqs'] for phonon frequency. hrf['hr_factors'] for partial Huang-Rhys factors.
     """
 
     def __init__(self, hrf):

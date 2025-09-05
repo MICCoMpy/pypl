@@ -7,6 +7,5 @@ Overview
 
 Features: 
 
-   - Calculation of vibrationally resolved photoluminescence and absorption spectra
-   - Temperature dependence of spectra
-
+   - Calculation of vibrationally resolved photoluminescence and absorption spectra using Huang-Rhys theory and the generating function approach
+   - Calculation of vibrationally resolved optical spectra using the one-dimensional configurational coordinate diagram (CCD) approach

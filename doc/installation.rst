@@ -12,7 +12,9 @@ The software is tested for python version 3.x and has the following dependencies
    - ``matplotlib``
    - ``h5py``
    - ``pyyaml``
-   
+   - ``sphinx``
+   - ``sphinx_rtd_theme``
+
 
 The dependencies will all be installed automatically, following instructions reported below.  
 
