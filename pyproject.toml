@@ -23,7 +23,7 @@ dependencies = [
     "sphinx",
     "sphinx_rtd_theme",
 ]
-version = "0.0"
+version = "1.0"
 
 [project.scripts]
 pypl = "pypl.cli:main"
