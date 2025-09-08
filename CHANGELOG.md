@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-v1.0 (2020/03/02)
+v1.0 (2025/09/05)
 -----------------
 
-- Initial stable release of the PyZFS code.
+- Initial stable release of the PyPL code.
