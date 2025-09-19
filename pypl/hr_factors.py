@@ -33,12 +33,13 @@ class hr_factors:
 
         self.nom_imag_freq = np.sum(np.where(self.freqs[3:] < 0.0))
         if self.nom_imag_freq > 0:
-            warnings.warn(f"{self.nom_imag_freq} imaginary mode(s) detected in the phonon spectrum. "
-                        "Results involving these modes (e.g., HR factors) may be unreliable.",
-                        UserWarning)
+            warnings.warn(
+                f"{self.nom_imag_freq} imaginary mode(s) detected in the phonon spectrum. "
+                "Results involving these modes (e.g., HR factors) may be unreliable.",
+                UserWarning,
+            )
 
         self.set_masses(mass_list=mass_list)
-
 
     def set_masses(self, mass_list=None):
         """
@@ -56,25 +57,124 @@ class hr_factors:
         """
 
         default_mass_list = mass_list = {
-            "H": 1.00784, "He": 4.002602,
-            "Li": 6.938, "Be": 9.0121831, "B": 10.806, "C": 12.0096, "N": 14.00643, "O": 15.99903, "F": 18.99840316, "Ne": 20.1797,
-            "Na": 22.98976928, "Mg": 24.304, "Al": 26.9815385, "Si": 28.084, "P": 30.973761998, "S": 32.059, "Cl": 35.446, "Ar": 39.948,
-            "K": 39.0983, "Ca": 40.078, "Sc": 44.955908, "Ti": 47.867, "V": 50.9415, "Cr": 51.9961, "Mn": 54.938043, "Fe": 55.845,
-            "Co": 58.933194, "Ni": 58.6934, "Cu": 63.546, "Zn": 65.38, "Ga": 69.723, "Ge": 72.63, "As": 74.921595, "Se": 78.971,
-            "Br": 79.901, "Kr": 83.798, "Rb": 85.4678, "Sr": 87.62, "Y": 88.90584, "Zr": 91.224, "Nb": 92.90637, "Mo": 95.95,
-            "Tc": 98.0, "Ru": 101.07, "Rh": 102.90550, "Pd": 106.42, "Ag": 107.8682, "Cd": 112.414, "In": 114.818, "Sn": 118.710,
-            "Sb": 121.760, "Te": 127.60, "I": 126.90447, "Xe": 131.293, "Cs": 132.90545196, "Ba": 137.327,
-            "La": 138.90547, "Ce": 140.116, "Pr": 140.90766, "Nd": 144.242, "Pm": 145.0, "Sm": 150.36, "Eu": 151.964,
-            "Gd": 157.25, "Tb": 158.92535, "Dy": 162.500, "Ho": 164.93033, "Er": 167.259, "Tm": 168.93422, "Yb": 173.045,
-            "Lu": 174.9668, "Hf": 178.49, "Ta": 180.94788, "W": 183.84, "Re": 186.207, "Os": 190.23, "Ir": 192.217,
-            "Pt": 195.084, "Au": 196.966569, "Hg": 200.592, "Tl": 204.38, "Pb": 207.2, "Bi": 208.98040,
-            "Po": 209.0, "At": 210.0, "Rn": 222.0, "Fr": 223.0, "Ra": 226.0,
-            "Ac": 227.0, "Th": 232.0377, "Pa": 231.03588, "U": 238.02891,
-            "Np": 237.0, "Pu": 244.0, "Am": 243.0, "Cm": 247.0, "Bk": 247.0,
-            "Cf": 251.0, "Es": 252.0, "Fm": 257.0, "Md": 258.0, "No": 259.0,
-            "Lr": 262.0, "Rf": 267.0, "Db": 270.0, "Sg": 271.0, "Bh": 270.0,
-            "Hs": 277.0, "Mt": 278.0, "Ds": 281.0, "Rg": 282.0, "Cn": 285.0,
-            "Nh": 286.0, "Fl": 289.0, "Mc": 290.0, "Lv": 293.0, "Ts": 294.0, "Og": 294.0
+            "H": 1.00784,
+            "He": 4.002602,
+            "Li": 6.938,
+            "Be": 9.0121831,
+            "B": 10.806,
+            "C": 12.0096,
+            "N": 14.00643,
+            "O": 15.99903,
+            "F": 18.99840316,
+            "Ne": 20.1797,
+            "Na": 22.98976928,
+            "Mg": 24.304,
+            "Al": 26.9815385,
+            "Si": 28.084,
+            "P": 30.973761998,
+            "S": 32.059,
+            "Cl": 35.446,
+            "Ar": 39.948,
+            "K": 39.0983,
+            "Ca": 40.078,
+            "Sc": 44.955908,
+            "Ti": 47.867,
+            "V": 50.9415,
+            "Cr": 51.9961,
+            "Mn": 54.938043,
+            "Fe": 55.845,
+            "Co": 58.933194,
+            "Ni": 58.6934,
+            "Cu": 63.546,
+            "Zn": 65.38,
+            "Ga": 69.723,
+            "Ge": 72.63,
+            "As": 74.921595,
+            "Se": 78.971,
+            "Br": 79.901,
+            "Kr": 83.798,
+            "Rb": 85.4678,
+            "Sr": 87.62,
+            "Y": 88.90584,
+            "Zr": 91.224,
+            "Nb": 92.90637,
+            "Mo": 95.95,
+            "Tc": 98.0,
+            "Ru": 101.07,
+            "Rh": 102.90550,
+            "Pd": 106.42,
+            "Ag": 107.8682,
+            "Cd": 112.414,
+            "In": 114.818,
+            "Sn": 118.710,
+            "Sb": 121.760,
+            "Te": 127.60,
+            "I": 126.90447,
+            "Xe": 131.293,
+            "Cs": 132.90545196,
+            "Ba": 137.327,
+            "La": 138.90547,
+            "Ce": 140.116,
+            "Pr": 140.90766,
+            "Nd": 144.242,
+            "Pm": 145.0,
+            "Sm": 150.36,
+            "Eu": 151.964,
+            "Gd": 157.25,
+            "Tb": 158.92535,
+            "Dy": 162.500,
+            "Ho": 164.93033,
+            "Er": 167.259,
+            "Tm": 168.93422,
+            "Yb": 173.045,
+            "Lu": 174.9668,
+            "Hf": 178.49,
+            "Ta": 180.94788,
+            "W": 183.84,
+            "Re": 186.207,
+            "Os": 190.23,
+            "Ir": 192.217,
+            "Pt": 195.084,
+            "Au": 196.966569,
+            "Hg": 200.592,
+            "Tl": 204.38,
+            "Pb": 207.2,
+            "Bi": 208.98040,
+            "Po": 209.0,
+            "At": 210.0,
+            "Rn": 222.0,
+            "Fr": 223.0,
+            "Ra": 226.0,
+            "Ac": 227.0,
+            "Th": 232.0377,
+            "Pa": 231.03588,
+            "U": 238.02891,
+            "Np": 237.0,
+            "Pu": 244.0,
+            "Am": 243.0,
+            "Cm": 247.0,
+            "Bk": 247.0,
+            "Cf": 251.0,
+            "Es": 252.0,
+            "Fm": 257.0,
+            "Md": 258.0,
+            "No": 259.0,
+            "Lr": 262.0,
+            "Rf": 267.0,
+            "Db": 270.0,
+            "Sg": 271.0,
+            "Bh": 270.0,
+            "Hs": 277.0,
+            "Mt": 278.0,
+            "Ds": 281.0,
+            "Rg": 282.0,
+            "Cn": 285.0,
+            "Nh": 286.0,
+            "Fl": 289.0,
+            "Mc": 290.0,
+            "Lv": 293.0,
+            "Ts": 294.0,
+            "Og": 294.0,
         }
 
         if mass_list is None:
@@ -84,10 +184,9 @@ class hr_factors:
         missing = [sym for sym in self.atomic_symbols if sym not in mass_list]
         if missing:
             raise ValueError(f"Missing atomic masses for the following elements: {', '.join(missing)}")
-        
-        self.masses = np.array([mass_list[sym] for sym in self.atomic_symbols])
-        self.masses *= constants.physical_constants['atomic mass constant'][0]
 
+        self.masses = np.array([mass_list[sym] for sym in self.atomic_symbols])
+        self.masses *= constants.physical_constants["atomic mass constant"][0]
 
     def compute_hrf_forces(self, forces):
         r"""
@@ -117,15 +216,20 @@ class hr_factors:
         mass_forces = mass_forces.ravel()
 
         modes = np.reshape(self.modes, (self.nom, self.nom))
-        deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq:, :], mass_forces)
-        deltaq = deltaq / self.freqs[self.nom_translational + self.nom_imag_freq:]**2
+        deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq :, :], mass_forces)
+        deltaq = deltaq / self.freqs[self.nom_translational + self.nom_imag_freq :] ** 2
 
-        print("Total \Delta Q is % .12e amu^{0.5} \AA" % (
-            np.linalg.norm(deltaq) / constants.physical_constants['atomic mass constant'][0]**0.5 * 1e10))
+        print(
+            "Total \Delta Q is % .12e amu^{0.5} \AA"
+            % (np.linalg.norm(deltaq) / constants.physical_constants["atomic mass constant"][0] ** 0.5 * 1e10)
+        )
 
-        self.hrf = np.concatenate((np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
-                                   deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq:] / 2 / constants.hbar))
-
+        self.hrf = np.concatenate(
+            (
+                np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
+                deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq :] / 2 / constants.hbar,
+            )
+        )
 
     def compute_hrf_dis(self, gs_coord, es_coord, cell_parameters):
         r"""
@@ -169,10 +273,16 @@ class hr_factors:
         mass_dis = mass_dis.flatten()
 
         modes = np.reshape(self.modes, (self.nom, self.nom))
-        deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq:, :], mass_dis)
+        deltaq = np.dot(modes[self.nom_translational + self.nom_imag_freq :, :], mass_dis)
 
-        print("Total \Delta Q is % .12e amu^{0.5} \AA" % (
-            np.linalg.norm(deltaq) / constants.physical_constants['atomic mass constant'][0]**0.5 * 1e10))
+        print(
+            "Total \Delta Q is % .12e amu^{0.5} \AA"
+            % (np.linalg.norm(deltaq) / constants.physical_constants["atomic mass constant"][0] ** 0.5 * 1e10)
+        )
 
-        self.hrf = np.concatenate((np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
-                                   deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq:] / 2 / constants.hbar))
+        self.hrf = np.concatenate(
+            (
+                np.zeros(self.nom_translational + self.nom_imag_freq, dtype=np.float64),
+                deltaq**2 * self.freqs[self.nom_translational + self.nom_imag_freq :] / 2 / constants.hbar,
+            )
+        )

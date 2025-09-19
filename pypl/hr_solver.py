@@ -14,7 +14,6 @@ class hr_solver:
     def __init__(self):
         return
 
-
     def compute_hrf_forces(self, phonon_freqs_in, phonon_modes_in, atomic_symbols, forces_in, mass_list=None):
         """
         Compute Huang-Rhys factors using atomic forces.
@@ -54,10 +53,18 @@ class hr_solver:
         print("Total Huang-Rhys factor is % .12e" % (np.sum(hrf.hrf)))
         print()
 
-        return {'freqs': freqs, 'hr_factors': hrf.hrf}
+        return {"freqs": freqs, "hr_factors": hrf.hrf}
 
-
-    def compute_hrf_dis(self, phonon_freqs_in, phonon_modes_in, atomic_symbols, gs_coord_in, es_coord_in, cell_parameters_in, mass_list=None):
+    def compute_hrf_dis(
+        self,
+        phonon_freqs_in,
+        phonon_modes_in,
+        atomic_symbols,
+        gs_coord_in,
+        es_coord_in,
+        cell_parameters_in,
+        mass_list=None,
+    ):
         """
         Compute Huang-Rhys factors using atomic displacements between
         ground-state (GS) and excited-state (ES) geometries.
@@ -101,8 +108,7 @@ class hr_solver:
 
         print("Total Huang-Rhys factor is % .12e" % (np.sum(hrf.hrf)))
 
-        return {'freqs': freqs, 'hr_factors': hrf.hrf}
-
+        return {"freqs": freqs, "hr_factors": hrf.hrf}
 
     @staticmethod
     def gaussian(x, mu, sigma):
@@ -129,10 +135,9 @@ class hr_solver:
         """
 
         prefactor = 1 / np.sqrt(2.0 * np.pi * sigma**2)
-        exponent = np.exp(- (x - mu)**2 / (2 * sigma**2))
+        exponent = np.exp(-((x - mu) ** 2) / (2 * sigma**2))
         f = prefactor * exponent
         return f
-
 
     @staticmethod
     def f_sigma(freqs, sigma):
@@ -159,7 +164,6 @@ class hr_solver:
 
         collect_sigma = sigma[0] - (sigma[0] - sigma[1]) / (max(freqs) - min(freqs)) * (freqs - min(freqs))
         return collect_sigma
-
 
     def compute_spectral_density(self, hrf_dict, energy_axis=None, sigma=[6.0, 1.5]):
         r"""
@@ -196,25 +200,32 @@ class hr_solver:
         if energy_axis is None:
             energy_axis = np.linspace(0, 200, 2001)
 
-        nom = hrf_dict['freqs'].shape[0]
+        nom = hrf_dict["freqs"].shape[0]
 
         gfxns = np.zeros((nom, energy_axis.shape[0]))
 
-        collect_sigmas = self.f_sigma(hrf_dict['freqs'], sigma)
+        collect_sigmas = self.f_sigma(hrf_dict["freqs"], sigma)
 
         gfxns[:, :] = self.gaussian(
-            energy_axis[None, :], 
-            hrf_dict['freqs'][:, None] * constants.hbar / constants.eV * 1000, 
-            collect_sigmas[:, None]
-            )
+            energy_axis[None, :],
+            hrf_dict["freqs"][:, None] * constants.hbar / constants.eV * 1000,
+            collect_sigmas[:, None],
+        )
 
-        spectral_density = np.dot(hrf_dict['hr_factors'], gfxns)
+        spectral_density = np.dot(hrf_dict["hr_factors"], gfxns)
         return energy_axis, spectral_density
 
-
-    def compute_lineshape_numerical_integration(self, hrf_dict, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
-                                                time_range=[0, 20000], time_resolution=200001,
-                                                lineshape_energy_range=[-150, 550], lineshape_energy_resolution=701):
+    def compute_lineshape_numerical_integration(
+        self,
+        hrf_dict,
+        temp=4,
+        sigma=[6, 1.5],
+        zpl_broadening=0.3,
+        time_range=[0, 20000],
+        time_resolution=200001,
+        lineshape_energy_range=[-150, 550],
+        lineshape_energy_resolution=701,
+    ):
         r"""
         Compute the temperature-dependent optical lineshape
         via direct numerical integration in the time domain.
@@ -256,17 +267,26 @@ class hr_solver:
         """
 
         time_axis = np.linspace(time_range[0], time_range[1], time_resolution)
-        lineshape_energy_axis = np.linspace(lineshape_energy_range[0], lineshape_energy_range[1], lineshape_energy_resolution)
+        lineshape_energy_axis = np.linspace(
+            lineshape_energy_range[0], lineshape_energy_range[1], lineshape_energy_resolution
+        )
 
         _lineshape = lineshape(hrf_dict)
-        _lineshape.compute_lineshape_numerical_integration(temp=temp, sigma=sigma, zpl_broadening=zpl_broadening,
-                                                                time_axis=time_axis, ene_axis=lineshape_energy_axis)
+        _lineshape.compute_lineshape_numerical_integration(
+            temp=temp, sigma=sigma, zpl_broadening=zpl_broadening, time_axis=time_axis, ene_axis=lineshape_energy_axis
+        )
         self.lineshape = _lineshape.lineshape
         return self.lineshape
 
-
-    def compute_lineshape_fft(self, hrf_dict, temp=4, sigma=[6, 1.5], zpl_broadening=0.3,
-                              lineshape_energy_range=[-1000, 1000], lineshape_energy_resolution=2001):
+    def compute_lineshape_fft(
+        self,
+        hrf_dict,
+        temp=4,
+        sigma=[6, 1.5],
+        zpl_broadening=0.3,
+        lineshape_energy_range=[-1000, 1000],
+        lineshape_energy_resolution=2001,
+    ):
         r"""
         Compute the temperature-dependent optical lineshape
         using FFT of the time-domain correlation function.
@@ -316,8 +336,7 @@ class hr_solver:
         self.lineshape = _lineshape.lineshape
         return self.lineshape
 
-
-    def compute_spectrum(self, ezpl=1.0, spectrum_type='PL', lineshape=None):
+    def compute_spectrum(self, ezpl=1.0, spectrum_type="PL", lineshape=None):
         """
         Compute the normalized photoluminescence (PL) or absorption spectrum
         from a precomputed lineshape.

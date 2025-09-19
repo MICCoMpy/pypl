@@ -66,7 +66,7 @@ def parse_forces_qexml(fileName):
         Atomic symbols for all atoms in the structure.
     forces : ndarray of shape (N, 3)
         Forces on atoms in eV/Å.
-    
+
     Raises
     ------
     ValueError
@@ -87,7 +87,7 @@ def parse_forces_qexml(fileName):
     if forces_tag is None:
         raise ValueError("Could not find <forces> tag in <output>.")
 
-    force_values = np.fromstring(forces_tag.text, sep=' ', dtype=np.float64)
+    force_values = np.fromstring(forces_tag.text, sep=" ", dtype=np.float64)
     forces = force_values.reshape((-1, 3)) * 2.0 * ry2ev / bohr2ang
 
     return atomic_symbols, forces
@@ -143,7 +143,7 @@ def parse_phonopy_h5(fileName, real_tol=1e-10):
         Phonon frequencies in THz.
     modes : ndarray of shape (M, Nat, 3)
         Phonon eigenmodes. Converted to real if imaginary parts are negligible.
-    
+
     Raises
     ------
     ValueError
@@ -183,14 +183,14 @@ def parse_phonopy_yaml(fileName="band.yaml", real_tol=1e-10):
         Phonon frequencies in THz.
     modes : ndarray of shape (3N, N, 3)
         Phonon eigenmodes.
-    
+
     Raises
     ------
     ValueError
         If the imaginary component of any eigenvector exceeds ``real_tol``.
     """
 
-    with open(fileName, 'r') as f:
+    with open(fileName, "r") as f:
         data = yaml.safe_load(f)
 
     bands = data["phonon"][0]["band"]

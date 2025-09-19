@@ -2,6 +2,7 @@ import numpy as np
 from scipy import constants
 from decimal import *
 
+
 class config_coord_1d_solver:
     """
     One-dimensional configuration coordinate diagram solver.
@@ -25,7 +26,6 @@ class config_coord_1d_solver:
         self.delta_q = delta_q
 
         getcontext().prec = prec
-
 
     def compute_franck_condon_integrals(self, ni, nf):
         r"""
@@ -80,12 +80,15 @@ class config_coord_1d_solver:
 
         for i in range(2, ni):
             for j in range(1, nf):
-                f[i, j] = 1 / np.sqrt(2 * i) * b * f[i - 1, j] + np.sqrt((i - 1) / i) * a * f[i - 2, j] + 1 / 2 * np.sqrt(j / i) * e * f[i - 1, j - 1]
-        
+                f[i, j] = (
+                    1 / np.sqrt(2 * i) * b * f[i - 1, j]
+                    + np.sqrt((i - 1) / i) * a * f[i - 2, j]
+                    + 1 / 2 * np.sqrt(j / i) * e * f[i - 1, j - 1]
+                )
+
         self.fc_ints = f
         self.ni = ni
         self.nf = nf
-
 
     @staticmethod
     def Gaussian(x, mu, sigma_r, sigma_factor=160):
@@ -125,7 +128,6 @@ class config_coord_1d_solver:
         f = prefactor * exponent
         return f
 
-
     @staticmethod
     def Lorentzian(x, mu, gamma):
         r"""
@@ -155,7 +157,6 @@ class config_coord_1d_solver:
         f = pref * mp
         return f
 
-
     @staticmethod
     def BZ(ene, T):
         r"""
@@ -180,7 +181,6 @@ class config_coord_1d_solver:
 
         bz_factor = np.exp(-(ene * 1e-3 * constants.eV) / (constants.k * T))
         return bz_factor
-
 
     def bulid_fc_lsp(self, eneaxis=None, temp=4, sigma=10, zpl_lorentzian=True, gamma=1):
         r"""
@@ -227,29 +227,29 @@ class config_coord_1d_solver:
         self.zpl_lorentzian = zpl_lorentzian
         self.gamma = gamma
 
-        self.energy_v = - self.omega_i * np.arange(self.ni)[:, None] + self.omega_f * np.arange(self.nf)[None, :]
+        self.energy_v = -self.omega_i * np.arange(self.ni)[:, None] + self.omega_f * np.arange(self.nf)[None, :]
 
         prefactors = self.BZ(self.omega_i * np.arange(self.ni), temp)
         # normalization
-        prefactors /= (np.sum(prefactors))
+        prefactors /= np.sum(prefactors)
         self.prefactors = prefactors
 
-        lineshape = (self.fc_ints[:, :][:, :, None]**2 
-                     * self.Gaussian(eneaxis[None, None, :], self.energy_v[:, :, None], sigma))
+        lineshape = self.fc_ints[:, :][:, :, None] ** 2 * self.Gaussian(
+            eneaxis[None, None, :], self.energy_v[:, :, None], sigma
+        )
         lineshape = np.sum(prefactors[:, None, None] * lineshape, axis=(0, 1))
         if zpl_lorentzian:
-            lineshape -= (self.fc_ints[0, 0]**2 * self.Gaussian(eneaxis, 0.0, sigma))
-            lineshape += (self.fc_ints[0, 0]**2 * self.Lorentzian(eneaxis, 0.0, gamma))
+            lineshape -= self.fc_ints[0, 0] ** 2 * self.Gaussian(eneaxis, 0.0, sigma)
+            lineshape += self.fc_ints[0, 0] ** 2 * self.Lorentzian(eneaxis, 0.0, gamma)
 
-        print('Integral check:', np.sum(lineshape) * (eneaxis[1] - eneaxis[0]))
+        print("Integral check:", np.sum(lineshape) * (eneaxis[1] - eneaxis[0]))
 
         self.eneaxis = eneaxis
         self.fc_lineshape = lineshape
 
         return self.eneaxis, self.fc_lineshape
 
-
-    def compute_spectrum(self, eneaxis=None, linshape=None, tdm=1.0, zpl=0.0, spectrum_type='PL'):
+    def compute_spectrum(self, eneaxis=None, linshape=None, tdm=1.0, zpl=0.0, spectrum_type="PL"):
         r"""
         Compute the optical spectrum from the FC lineshape.
 
@@ -293,10 +293,10 @@ class config_coord_1d_solver:
         if linshape is None:
             linshape = self.fc_lineshape
 
-        if spectrum_type == 'PL':
+        if spectrum_type == "PL":
             eneaxis_out = zpl - eneaxis
-            spectrum = linshape * tdm**2 * (zpl - eneaxis)**3
-        elif spectrum_type == 'Abs':
+            spectrum = linshape * tdm**2 * (zpl - eneaxis) ** 3
+        elif spectrum_type == "Abs":
             eneaxis_out = zpl + eneaxis
             spectrum = linshape * tdm**2 * (zpl + eneaxis)
         else:
@@ -353,19 +353,21 @@ if __name__ == "__main__":
     ccd_pl = config_coord_1d_solver(freq_es, freq_gs, delta_q)
 
     ccd_pl.compute_franck_condon_integrals(ni=order_es, nf=order_gs)
-    ccd_pl.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
-                        temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
+    ccd_pl.bulid_fc_lsp(
+        eneaxis=np.linspace(ene_range[0], ene_range[1], resol), temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma
+    )
 
-    pl_spectrum = ccd_pl.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='PL')
+    pl_spectrum = ccd_pl.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type="PL")
 
     # absorption
     ccd_abs = config_coord_1d_solver(freq_gs, freq_es, delta_q)
 
     ccd_abs.compute_franck_condon_integrals(ni=order_gs, nf=order_es)
-    ccd_abs.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
-                         temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
+    ccd_abs.bulid_fc_lsp(
+        eneaxis=np.linspace(ene_range[0], ene_range[1], resol), temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma
+    )
 
-    abs_spectrum = ccd_abs.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type='Abs')
+    abs_spectrum = ccd_abs.compute_spectrum(tdm=tdm, zpl=zpl, spectrum_type="Abs")
 
     ########
     # plot #
@@ -376,16 +378,28 @@ if __name__ == "__main__":
     red = "#DB4437"
     blue = "#4285F4"
 
-    ax.plot(pl_spectrum[0] * 1e-3, pl_spectrum[1] / (np.sum(pl_spectrum[1]) * abs(pl_spectrum[0][1] - pl_spectrum[0][0])) * 1e3,
-            color=red, linewidth=1, linestyle="-", label='PL')
-    ax.plot(abs_spectrum[0] * 1e-3, abs_spectrum[1] / (np.sum(abs_spectrum[1]) * abs(abs_spectrum[0][1] - abs_spectrum[0][0])) * 1e3,
-            color=blue, linewidth=1, linestyle="-", label='Abs')
+    ax.plot(
+        pl_spectrum[0] * 1e-3,
+        pl_spectrum[1] / (np.sum(pl_spectrum[1]) * abs(pl_spectrum[0][1] - pl_spectrum[0][0])) * 1e3,
+        color=red,
+        linewidth=1,
+        linestyle="-",
+        label="PL",
+    )
+    ax.plot(
+        abs_spectrum[0] * 1e-3,
+        abs_spectrum[1] / (np.sum(abs_spectrum[1]) * abs(abs_spectrum[0][1] - abs_spectrum[0][0])) * 1e3,
+        color=blue,
+        linewidth=1,
+        linestyle="-",
+        label="Abs",
+    )
 
     ax.set_xlim((1.5, 2.4))
     ax.set_ylim((0.0, 6))
 
     ax.legend(fontsize=12, loc="upper right", edgecolor="black")
-    ax.grid(color='gray', linestyle='--', linewidth=0.5)
+    ax.grid(color="gray", linestyle="--", linewidth=0.5)
 
     ax.tick_params(direction="in")
     ax.xaxis.set_ticks_position("both")
