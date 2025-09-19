@@ -3,7 +3,7 @@
 Tutorials
 =========
 
-These tutorials demonstrate how to utilize core features of **PyPL**. 
+These tutorials demonstrate how to utilize core features of **PyPL**.
 
 Contents:
 

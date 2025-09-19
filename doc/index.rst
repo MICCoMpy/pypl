@@ -5,10 +5,6 @@
 Welcome to PyPL's documentation!
 ==================================
 
-.. important::
-
-    This is documentation for the **PyPL** package.
-
 Contents
 --------
 
@@ -19,7 +15,7 @@ Contents
    overview
    installation
    citation
-   tutorial  
+   tutorial
    manual
    acknowledge
 
@@ -45,5 +41,5 @@ Contents
    To get help using the **PyPL** package, send an email to `jinyuchem@uchicago.edu <mailto:jinyuchem@uchicago.edu>`_.
 
 
-The **PyPL** package is hosted on `Github <https://github.com/MICCoMpy/pypl>`_ and licensed under the open-source MIT license.
+The **PyPL** package is hosted on `GitHub <https://github.com/MICCoMpy/pypl>`_ and licensed under the open-source MIT license.
 

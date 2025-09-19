@@ -1,7 +1,7 @@
 Step 1: Generate all displacements patterns (at the ground state structure)
     phonopy --qe -d --dim="1 1 1" -c gs-dft-pw.in -v
 
-Step 2: Perform DFT scf calculations using the displaced structures 
+Step 2: Perform DFT scf calculations using the displaced structures
 
 Step 3: Collect all forces
     phonopy --qe -f supercell-{001..574}.out
