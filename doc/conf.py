@@ -12,7 +12,8 @@ sys.path.insert(0, os.path.abspath('../'))
 project = 'PyPL'
 author = 'Yu Jin'
 copyright = f'{datetime.now().year}, {author}'
-release = '1.0'
+version = '1.0'
+release = version
 
 # -- General configuration ---------------------------------------------------
 extensions = [

@@ -1,7 +1,7 @@
-.. _Manual:
+.. _documentation:
 
-Manual
-======
+Documentation
+=============
 
 The complete **PyPL** reference is reported below.
 

@@ -4,8 +4,8 @@
 Installation
 ============
 
-The recommendend installation method for **PyPL** is via python install.
-The software is tested for python version 3.x and has the following dependencies:
+The recommendend installation method for **PyPL** is via Python install.
+The software is tested for Python version 3.x and has the following dependencies:
 
    - ``numpy``
    - ``scipy``
@@ -15,22 +15,15 @@ The software is tested for python version 3.x and has the following dependencies
    - ``sphinx``
    - ``sphinx_rtd_theme``
 
-
-The dependencies will all be installed automatically, following instructions reported below.
-
-
-Source Code Installation
-========================
-
-To install **PyPL** you need to execute:
+To install **PyPL** and its dependencies, execute:
 
 .. code:: bash
 
-    $ git clone https://github.com/jinyuchem/pypl.git
+    $ git clone https://github.com/MICCoMpy/pypl.git
     $ cd pypl
     $ pip install .
 
-If using **pip** is not possible, one can manually install the above dependencies, and then add the directory of **PyPL** to the ``PYTHONPATH`` environment variable by, e.g.,
+If using **pip** is not possible, one can manually install the above dependencies, then add the directory of **PyPL** to the ``PYTHONPATH`` environment variable by, e.g.,
 
 .. code:: bash
 

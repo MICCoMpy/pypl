@@ -2,9 +2,8 @@
 calculation = 'scf'
 restart_mode = 'from_scratch'
 prefix = 'pwscf'
-pseudo_dir = '/home/jinyuchem/program/QE/pseudo-potential'
+pseudo_dir = './'
 outdir = './'
-wf_collect = .TRUE.
 tprnfor = .TRUE.
 verbosity = 'high'
 /
@@ -29,8 +28,8 @@ startingpot = 'atomic'
 startingwfc = 'atomic+random'
 /
 ATOMIC_SPECIES
-C  12.0107 C_ONCV_PBE-1.0.upf
-N  14.0000 N_ONCV_PBE-1.0.upf
+C  12.0107 C_ONCV_PBE-1.2.upf
+N  14.0000 N_ONCV_PBE-1.2.upf
 CELL_PARAMETERS angstrom
 14.272 0.0 0.0
 0.0 14.272 0.0
