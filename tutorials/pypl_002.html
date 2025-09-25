@@ -1,0 +1,560 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>002. Photoluminescence and absorption spectra of triplet transitions in the nitrogen-vacancy center in diamond via the one-dimensional configurational coordinate diagram &mdash; PyPL 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Documentation" href="../documentation.html" />
+    <link rel="prev" title="001. Photoluminescence and absorption of triplet transitions in the nitrogen-vacancy center in diamond using Huang-Rhys theory" href="pypl_001.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyPL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pypl_001.html">001. Photoluminescence and absorption of triplet transitions in the nitrogen-vacancy center in diamond using Huang-Rhys theory</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">002. Photoluminescence and absorption spectra of triplet transitions in the nitrogen-vacancy center in diamond via the one-dimensional configurational coordinate diagram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#1.-Construction-of-the-one-dimensional-configurational-coordinate-diagram">1. Construction of the one-dimensional configurational coordinate diagram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#2.-Computation-of-photoluminescence-and-absorption-spectra">2. Computation of photoluminescence and absorption spectra</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyPL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorial.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">002. Photoluminescence and absorption spectra of triplet transitions in the nitrogen-vacancy center in diamond via the one-dimensional configurational coordinate diagram</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/pypl_002.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="002.-Photoluminescence-and-absorption-spectra-of-triplet-transitions-in-the-nitrogen-vacancy-center-in-diamond-via-the-one-dimensional-configurational-coordinate-diagram">
+<h1>002. Photoluminescence and absorption spectra of triplet transitions in the nitrogen-vacancy center in diamond via the one-dimensional configurational coordinate diagram<a class="headerlink" href="#002.-Photoluminescence-and-absorption-spectra-of-triplet-transitions-in-the-nitrogen-vacancy-center-in-diamond-via-the-one-dimensional-configurational-coordinate-diagram" title="Link to this heading"></a></h1>
+<p>In this notebook, we demonstrate how to use <code class="docutils literal notranslate"><span class="pre">PyPL</span></code> to compute vibrationally resolved photoluminescence (PL) and absorption spectra associated with the transition between the triplet excited state (<span class="math notranslate nohighlight">\(^3E\)</span>) and the triplet ground state (<span class="math notranslate nohighlight">\(^3A_2\)</span>) of the negatively charged nitrogen-vacancy center NV<span class="math notranslate nohighlight">\(^-\)</span> in diamond, using the one-dimensional configurational coordinate diagram (1D-CCD) approach.</p>
+<p>The notebook is organized into two main parts:</p>
+<ol class="arabic simple">
+<li><p>Construction of 1D-CCD</p></li>
+<li><p>Computation of PL and absorption spectra</p></li>
+</ol>
+<section id="1.-Construction-of-the-one-dimensional-configurational-coordinate-diagram">
+<h2>1. Construction of the one-dimensional configurational coordinate diagram<a class="headerlink" href="#1.-Construction-of-the-one-dimensional-configurational-coordinate-diagram" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from scipy import constants
+import matplotlib.pyplot as plt
+
+plt.rcParams.update({&#39;font.size&#39;: 12})
+
+blue = &#39;#4285F4&#39;
+red = &#39;#DB4437&#39;
+
+from pypl.config_coord_1d_solver import config_coord_1d_solver
+from pypl.utils import *
+import os
+
+path = os.getcwd()
+os.chdir(path)
+</pre></div>
+</div>
+</div>
+<p>The first step is to construct the 1D CCD and extract the mass-weighted displacements and effective phonon frequencies.</p>
+<p>Starting from the equilibrium geometries of the ground state <span class="math notranslate nohighlight">\({}^3\!A_2\)</span> (<code class="docutils literal notranslate"><span class="pre">002_nv_diamond_1d_ccd/gs_dft/gs_coord.in</span></code>) and the excited state <span class="math notranslate nohighlight">\({}^3\!E\)</span> (<code class="docutils literal notranslate"><span class="pre">002_nv_diamond_1d_ccd/es_cdft/es_cdft_010_coord.in</span></code>), we perform a linear interpolation between them and compute the energy profiles of both states along the interpolated path.</p>
+<p>Ground-state density functional theory (DFT) calculations for the interpolated configurations are provided in <code class="docutils literal notranslate"><span class="pre">002_nv_diamond_1d_ccd/gs_1d_ccd/</span></code>, where the script <code class="docutils literal notranslate"><span class="pre">generate.py</span></code> generates single-point DFT inputs for each interpolated geometry. Similarly, the excited-state constrained-occupation DFT (CDFT, aka <span class="math notranslate nohighlight">\(\Delta\)</span>SCF) calculations are found in <code class="docutils literal notranslate"><span class="pre">002_nv_diamond_1d_ccd/es_1d_ccd/</span></code>. The interpolation path is defined as <code class="docutils literal notranslate"><span class="pre">np.linspace(-0.2,</span> <span class="pre">1.2,</span> <span class="pre">15)</span></code>, where <code class="docutils literal notranslate"><span class="pre">0.0</span></code> corresponds to the
+equilibrium ground-state geometry and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> to the equilibrium excited-state geometry.</p>
+<p><strong>Note</strong>: For the interpolation to work, the atoms in the ground-state DFT and excited-state <span class="math notranslate nohighlight">\(\Delta\)</span>SCF calculations must appear in the same order.</p>
+<p>First, we compute the mass-weighted atomic displacement between the ground-state and excited-state geometries.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Unit of coordinates and cell_parameters is Angstrom
+atomic_symbols, gs_coord, cell_parameters = parse_atoms_qexml(&#39;002_nv_diamond_1d_ccd/gs_dft/pwscf.xml&#39;)
+atomic_symbols_2, es_coord, cell_parameters_2 = parse_atoms_qexml(&#39;002_nv_diamond_1d_ccd/es_cdft/pwscf.xml&#39;)
+
+# Ensure that both sets of atomic coordinates have consistent atomic symbols and cell parameters.
+assert atomic_symbols == atomic_symbols_2, &#39;Mismatch in atomic symbols between ground-state and excited-state structures.&#39;
+assert np.max(np.abs(cell_parameters - cell_parameters_2)) &lt; 1e-12, &#39;Mismatch in cell parameters between ground-state and excited-state structures.&#39;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mass_list = {&#39;C&#39;: 12.0107, &#39;N&#39;: 14.0067}
+all_masses = np.array([mass_list[sym] for sym in atomic_symbols])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>delta_q = np.linalg.norm((es_coord - gs_coord) * all_masses[:, None]**0.5)
+print(&#39;\Delta Q = % .10e amu^{0.5} \AA&#39; % (delta_q))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\Delta Q =  6.9573191451e-01 amu^{0.5} \AA
+</pre></div></div>
+</div>
+<p>This displacement (<span class="math notranslate nohighlight">\(\Delta Q\)</span>) is comparable to the value obtained from the Huang–Rhys theory using all phonon modes in Tutorial 001, which is approximately <span class="math notranslate nohighlight">\(0.65\ \text{amu}^{0.5} \text{Å}\)</span>.</p>
+<p>In the next step, we parse the energies from the single-point DFT and <span class="math notranslate nohighlight">\(\Delta\)</span>SCF calculations at each interpolated geometry.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>relative_coordinates = np.linspace(-0.2, 1.2, 15)
+
+gs_rel_coord = []
+es_rel_coord = []
+# energies are in eV
+gs_energies = np.zeros(relative_coordinates.shape[0])
+es_energies = np.zeros(relative_coordinates.shape[0])
+
+for i in range(relative_coordinates.shape[0]):
+    fileName = &#39;002_nv_diamond_1d_ccd/gs_1d_ccd/Image-%d/pwscf.xml&#39; % (i + 1)
+    if os.path.exists(fileName):
+        gs_rel_coord.append(i)
+        gs_energies[i] = parse_total_energy_qexml(fileName)
+    fileName = &#39;002_nv_diamond_1d_ccd/es_1d_ccd/Image-%d/pwscf.xml&#39; % (i + 1)
+    if os.path.exists(fileName):
+        es_rel_coord.append(i)
+        es_energies[i] = parse_total_energy_qexml(fileName)
+
+# reset the energy zero
+ref_energy = np.min(gs_energies)
+gs_energies = gs_energies[gs_rel_coord] - np.min(ref_energy)
+es_energies = es_energies[es_rel_coord] - np.min(ref_energy)
+
+gs_1d_coord = delta_q * relative_coordinates[gs_rel_coord]
+es_1d_coord = delta_q * relative_coordinates[es_rel_coord]
+</pre></div>
+</div>
+</div>
+<p>We can now plot the 1D CCD and perform a fit to obtain the effective phonon frequencies. The fitting is performed using the points in the vicinity of the local minima on both energy surfaces.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from scipy.optimize import curve_fit
+
+def gs_fit_fun(x, a, c):
+    return a * x**2 + c
+
+def es_fit_fun(x, a, c):
+    return a * (x - delta_q) ** 2 + c
+
+# Ground state phonon
+gs_params = curve_fit(gs_fit_fun, gs_1d_coord[:5], gs_energies[:5])[0]
+print(&#39;Parameters for GS curve: &#39;, gs_params)
+gs_fit_energies = gs_fit_fun(gs_1d_coord, gs_params[0], gs_params[1])
+
+# (rad / s)^2
+gs_phonon = 2 * gs_params[0] * constants.eV / (1e-10**2 * constants.physical_constants[&#39;atomic mass constant&#39;][0])
+# eV^2
+gs_phonon *= (constants.hbar**2 / constants.eV**2)
+# meV
+gs_phonon = np.sqrt(gs_phonon) * 1000
+print(&#39;GS phonon is %.5f meV&#39; % gs_phonon)
+
+# Excited state phonon
+es_params = curve_fit(es_fit_fun, es_1d_coord[4:], es_energies[4:])[0]
+print(&#39;Parameters for ES curve: &#39;, es_params)
+es_fit_energies = es_fit_fun(es_1d_coord, es_params[0], es_params[1])
+
+# (rad / s)^2
+es_phonon = 2 * es_params[0] * constants.eV / (1e-10**2 * constants.physical_constants[&#39;atomic mass constant&#39;][0])
+# eV^2
+es_phonon *= (constants.hbar**2 / constants.eV**2)
+# meV
+es_phonon = np.sqrt(es_phonon) * 1000
+print(&#39;ES phonon is %.5f meV&#39; % es_phonon)
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Parameters for GS curve:  [ 4.17627359e-01 -1.34422863e-05]
+GS phonon is 59.08890 meV
+Parameetrs for ES curve:  [0.49472065 1.70587686]
+ES phonon is 64.31191 meV
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gs_hrf = (
+    delta_q**2 * 1e-10**2 * constants.physical_constants[&#39;atomic mass constant&#39;][0]
+    * gs_phonon * 1e-3 * constants.eV / constants.hbar
+    / (2 * constants.hbar)
+)
+print(&#39;HR for GS is %.5f&#39; % gs_hrf)
+
+es_hrf = (
+    delta_q**2 * 1e-10**2 * constants.physical_constants[&#39;atomic mass constant&#39;][0]
+    * es_phonon * 1e-3 * constants.eV / constants.hbar
+    / (2 * constants.hbar)
+)
+print(&#39;HR for ES is %.5f&#39; % es_hrf)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+HR for GS is 3.42111
+HR for ES is 3.72351
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(1, 1, figsize=(5, 7))
+
+ax.plot(es_1d_coord, es_energies, color=blue, linestyle=&#39;&#39;, marker=&#39;s&#39;, markersize=5, label=&#39;ES energy&#39;)
+ax.plot(gs_1d_coord, gs_energies, color=red, linestyle=&#39;&#39;, marker=&#39;o&#39;, markersize=5, label=&#39;GS energy&#39;)
+
+ax.plot(es_1d_coord, es_fit_energies, color=blue, linestyle=&#39;--&#39;, linewidth=1.0, marker=&#39;&#39;, label=&#39;ES fit&#39;)
+ax.plot(gs_1d_coord, gs_fit_energies, color=red, linestyle=&#39;--&#39;, linewidth=1.0, marker=&#39;&#39;, label=&#39;GS fit&#39;)
+
+ax.text(x=0.46, y=0.4, s=&#39;GS phonon: %.2f meV\nGS HRF: %.2f&#39; % (gs_phonon, gs_hrf), color=red, transform=ax.transAxes)
+ax.text(x=0.46, y=0.6, s=&#39;ES phonon: %.2f meV\nES HRF: %.2f&#39; % (es_phonon, es_hrf), color=blue, transform=ax.transAxes)
+
+ax.axvline(x=0.0, color=&#39;gray&#39;, linestyle=&#39;--&#39;, linewidth=1)
+ax.axvline(x=delta_q, color=&#39;gray&#39;, linestyle=&#39;--&#39;, linewidth=1)
+
+ax.legend(fontsize=12, loc=&#39;center left&#39;, edgecolor=&#39;black&#39;)
+ax.set_xlim((-0.2, 0.9))
+plt.xlabel(&#39;Q (amu$^{1/2}$ Å)&#39;)
+plt.ylabel(&#39;Total Energy (eV)&#39;)
+plt.tick_params(direction=&#39;in&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_pypl_002_15_0.png" src="../_images/tutorials_pypl_002_15_0.png" />
+</div>
+</div>
+<p>Therefore, we obtain an effective phonon energy of <span class="math notranslate nohighlight">\(59.09\)</span> meV for the ground state and <span class="math notranslate nohighlight">\(64.31\)</span> meV for the excited state.</p>
+</section>
+<section id="2.-Computation-of-photoluminescence-and-absorption-spectra">
+<h2>2. Computation of photoluminescence and absorption spectra<a class="headerlink" href="#2.-Computation-of-photoluminescence-and-absorption-spectra" title="Link to this heading"></a></h2>
+<p>With the mass-weighted atomic displacement (<code class="docutils literal notranslate"><span class="pre">delta_q</span></code>) and the effective phonon energies of the ground and excited states (<code class="docutils literal notranslate"><span class="pre">gs_phonon</span></code> and <code class="docutils literal notranslate"><span class="pre">es_phonon</span></code>), we can use the <code class="docutils literal notranslate"><span class="pre">config_coord_1d_solver</span></code> from <code class="docutils literal notranslate"><span class="pre">PyPL</span></code> to compute both the PL and absorption spectra.</p>
+<p>There are a few parameters that need to be defined.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># order (must be large enough to converge the spectra and should be tested for each system)
+order_es = 50
+order_gs = 60
+
+# energy range for plot (meV)
+ene_range = [-200, 1200]
+
+# resolution
+resol = 1401
+
+# temperature (K)
+temp = 5
+
+# broadening (empirically set to best match experiment)
+gamma = 0.3
+sigma = [8, 25]
+
+# ZPL (meV)
+ezpl = 1945
+</pre></div>
+</div>
+</div>
+<p>The PL spectrum is obtained by first evaluating the Franck–Condon integrals, followed by summing over all possible initial and final vibrational states.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ccd_pl = config_coord_1d_solver(es_phonon, gs_phonon, delta_q)
+
+ccd_pl.compute_franck_condon_integrals(ni=order_es, nf=order_gs)
+ccd_pl.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
+                    temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
+pl_spectrum = ccd_pl.compute_spectrum(tdm=1.0, zpl=ezpl, spectrum_type=&#39;PL&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Integral check: 1.010097299613035
+</pre></div></div>
+</div>
+<p>The absorption spectrum is evaluated in the same manner, with the important distinction that the initial state corresponds to the ground state and the final state to the excited state, i.e., the opposite of the PL process.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ccd_abs = config_coord_1d_solver(gs_phonon, es_phonon, delta_q)
+
+ccd_abs.compute_franck_condon_integrals(ni=order_gs, nf=order_es)
+ccd_abs.bulid_fc_lsp(eneaxis=np.linspace(ene_range[0], ene_range[1], resol),
+                        temp=temp, sigma=sigma, zpl_lorentzian=True, gamma=gamma)
+
+abs_spectrum = ccd_abs.compute_spectrum(tdm=1.0, zpl=ezpl, spectrum_type=&#39;Abs&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Integral check: 1.0100958192183735
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+
+ax.plot(pl_spectrum[0] * 1e-3, pl_spectrum[1] / (np.sum(pl_spectrum[1]) * abs(pl_spectrum[0][1] - pl_spectrum[0][0])) * 1e3,
+        color=red, linewidth=1, linestyle=&#39;-&#39;, label=&#39;PL&#39;)
+ax.plot(abs_spectrum[0] * 1e-3, abs_spectrum[1] / (np.sum(abs_spectrum[1]) * abs(abs_spectrum[0][1] - abs_spectrum[0][0])) * 1e3,
+        color=blue, linewidth=1, linestyle=&#39;-&#39;, label=&#39;Abs&#39;)
+
+ax.set_xlim((1.5, 2.4))
+ax.set_ylim((0.0, 6))
+
+ax.legend(fontsize=12, loc=&#39;upper right&#39;, edgecolor=&#39;black&#39;)
+ax.grid(color=&#39;gray&#39;, linestyle=&#39;--&#39;, linewidth=0.5)
+
+ax.tick_params(direction=&#39;in&#39;)
+ax.xaxis.set_ticks_position(&#39;both&#39;)
+ax.yaxis.set_ticks_position(&#39;both&#39;)
+ax.set_xlabel(&#39;$\hbar\omega$ (eV)&#39;)
+ax.set_ylabel(&#39;PL (arb. unit.)&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_pypl_002_24_0.png" src="../_images/tutorials_pypl_002_24_0.png" />
+</div>
+</div>
+<p>These spectra can be further compared with the results obtained from the Huang–Rhys theory including all phonon modes, as demonstrated in Tutorial 001.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from pypl.hr_solver import hr_solver
+
+gs_phonon_file = &#39;001_nv_diamond_abs_pl/phonon/gs_ph_mesh.hdf5&#39;
+gs_file = &#39;001_nv_diamond_abs_pl/gs_dft/pwscf.xml&#39;
+es_file = &#39;001_nv_diamond_abs_pl/es_cdft/pwscf.xml&#39;
+
+# Unit of freqs is THz
+gs_phonon_freqs, gs_phonon_modes = parse_phonopy_h5(gs_phonon_file)
+# Unit of coordinates and cell_parameters is Angstrom
+atomic_symbols, gs_coord, cell_parameters = parse_atoms_qexml(gs_file)
+atomic_symbols_2, es_coord, cell_parameters_2 = parse_atoms_qexml(es_file)
+
+mass_list = {&#39;C&#39;: 12.0107, &#39;N&#39;: 14.0067}
+
+pl_use_dis = hr_solver()
+hrf_dict_pl_dis = pl_use_dis.compute_hrf_dis(gs_phonon_freqs, gs_phonon_modes, atomic_symbols, gs_coord, es_coord, cell_parameters, mass_list=mass_list)
+linshape_fft_pl_dis = pl_use_dis.compute_lineshape_fft(hrf_dict_pl_dis, temp=4, sigma=[6, 2], zpl_broadening=0.3)
+spectrum_pl_dis = pl_use_dis.compute_spectrum(ezpl, spectrum_type=&#39;PL&#39;, lineshape=linshape_fft_pl_dis)
+
+
+es_phonon_fname = &#39;001_nv_diamond_abs_pl/phonon/es_ph_mesh.hdf5&#39;
+es_phonon_freqs, es_phonon_modes = parse_phonopy_h5(es_phonon_fname)
+
+abs_use_dis = hr_solver()
+hrf_dict_abs_dis = abs_use_dis.compute_hrf_dis(es_phonon_freqs, es_phonon_modes, atomic_symbols, gs_coord, es_coord, cell_parameters, mass_list=mass_list)
+lineshape_fft_abs_dis = abs_use_dis.compute_lineshape_fft(hrf_dict_abs_dis, temp=4, sigma=[6.0, 2.0], zpl_broadening=0.3)
+spectrum_abs_dis = abs_use_dis.compute_spectrum(ezpl, spectrum_type=&#39;Abs&#39;, lineshape=lineshape_fft_abs_dis)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Computing Huang-Rhys factors using atomic displacements.
+Total \Delta Q is  6.529832366847e-01 amu^{0.5} \AA
+Total Huang-Rhys factor is  2.985289200067e+00
+time_axis range: -2.067833848461893e-12 to 2.067833848461893e-12
+d_t (s): 2.066800448237774e-15
+Energy range (meV): -1000.0000000000176 to 1000.0000000000176
+d_E (meV): 0.9999999999998863
+Integral check: 999.9999999998705
+Computing Huang-Rhys factors using atomic displacements.
+Total \Delta Q is  6.529832366847e-01 amu^{0.5} \AA
+Total Huang-Rhys factor is  3.102826963299e+00
+time_axis range: -2.067833848461893e-12 to 2.067833848461893e-12
+d_t (s): 2.066800448237774e-15
+Energy range (meV): -1000.0000000000176 to 1000.0000000000176
+d_E (meV): 0.9999999999998863
+Integral check: 999.9999999998684
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+
+ax.plot(pl_spectrum[0] * 1e-3, pl_spectrum[1] / (np.sum(pl_spectrum[1]) * abs(pl_spectrum[0][1] - pl_spectrum[0][0])) * 1e3,
+        color=red, linewidth=1, linestyle=&#39;-&#39;, label=&#39;PL, 1D CCD&#39;)
+ax.plot(abs_spectrum[0] * 1e-3, abs_spectrum[1] / (np.sum(abs_spectrum[1]) * abs(abs_spectrum[0][1] - abs_spectrum[0][0])) * 1e3,
+        color=blue, linewidth=1, linestyle=&#39;-&#39;, label=&#39;Abs, 1D CCD&#39;)
+
+ax.plot(spectrum_pl_dis[0] * 1e-3, spectrum_pl_dis[1] / (np.sum(spectrum_pl_dis[1]) * abs(spectrum_pl_dis[0][1] - spectrum_pl_dis[0][0])) * 1e3,
+        label=&#39;PL, HR&#39;, color=red, linestyle=&#39;--&#39;)
+ax.plot(spectrum_abs_dis[0] * 1e-3, spectrum_abs_dis[1] / (np.sum(spectrum_abs_dis[1]) * abs(spectrum_abs_dis[0][1] - spectrum_abs_dis[0][0])) * 1e3,
+        label=&#39;Abs, HR&#39;, color=blue, linestyle=&#39;--&#39;)
+
+ax.set_xlim((1.5, 2.4))
+ax.set_ylim((0.0, 6))
+
+ax.legend(fontsize=12, loc=&#39;upper right&#39;, edgecolor=&#39;black&#39;)
+ax.grid(color=&#39;gray&#39;, linestyle=&#39;--&#39;, linewidth=0.5)
+
+ax.tick_params(direction=&#39;in&#39;)
+ax.xaxis.set_ticks_position(&#39;both&#39;)
+ax.yaxis.set_ticks_position(&#39;both&#39;)
+ax.set_xlabel(&#39;$\hbar\omega$ (eV)&#39;)
+ax.set_ylabel(&#39;PL (arb. unit.)&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_pypl_002_27_0.png" src="../_images/tutorials_pypl_002_27_0.png" />
+</div>
+</div>
+<p>The 1D CCD approach shows generally good agreement with the results from Huang–Rhys theory, although it misses some of the finer spectral features. Nevertheless, the 1D CCD provides a powerful and practical approximation.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pypl_001.html" class="btn btn-neutral float-left" title="001. Photoluminescence and absorption of triplet transitions in the nitrogen-vacancy center in diamond using Huang-Rhys theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../documentation.html" class="btn btn-neutral float-right" title="Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yu Jin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
